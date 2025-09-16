@@ -7,7 +7,7 @@ class FarmersApi {
     private val client = SupabaseClientProvider.client
 
     suspend fun getFarmers(): List<Farmer> {
-        return client.from("farmer")
+        return client.from("farmers")
             .select()
             .decodeList()
     }
