@@ -1,5 +1,6 @@
 package com.example.cattletrackingapp.data.model
 
+import androidx.annotation.Nullable
 import kotlinx.serialization.Serializable
 
 @Serializable
