@@ -45,7 +45,7 @@ fun HomeScreen(navController: NavController) {
     )
 
     val menuItems = listOf(
-        MenuItem("Cattle List", Screen.CattleList.route, Icons.Default.List),
+        MenuItem("Cattle List", Screen.CattleList.route, Icons.AutoMirrored.Filled.List),
         MenuItem("Add Cow", Screen.AddCattle.route, Icons.Default.Add)
     )
 
