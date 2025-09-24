@@ -17,10 +17,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -34,7 +31,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.ui.navigation.Screen
-import com.example.cattletrackingapp.ui.navigation.Screen.Home.route
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -50,7 +46,7 @@ fun HomeScreen(navController: NavController) {
     )
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // ✅ 2-column grid
+        columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -64,10 +60,10 @@ fun HomeScreen(navController: NavController) {
                     .height(120.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,
+                    containerColor = MaterialTheme.colorScheme.tertiary,
                     contentColor = Color.White
                 ),
-                border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
 
             ) {
                 Row(

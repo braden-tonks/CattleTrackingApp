@@ -13,4 +13,14 @@ class CowsApi {
             .select()
             .decodeList()
     }
+
+    suspend fun insertCow(cow: Cow): Boolean {
+        return try {
+            client.from("cows").insert(cow)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
 }
