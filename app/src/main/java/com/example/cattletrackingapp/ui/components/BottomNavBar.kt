@@ -1,6 +1,5 @@
 package com.example.cattletrackingapp.ui.components
 
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -14,11 +13,12 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.ui.navigation.Screen
 
 
@@ -32,7 +32,7 @@ fun BottomNavBar(navController: NavController) {
 
     NavigationBar (
         containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.tertiary
+        contentColor = MaterialTheme.colorScheme.onPrimary
     ){
         val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 
@@ -47,7 +47,8 @@ fun BottomNavBar(navController: NavController) {
                         Screen.Home -> Icon(Icons.Default.Home,
                             contentDescription = "Home",
                             modifier = Modifier.size(40.dp))
-                        Screen.SearchByRFID -> Icon(Icons.Default.Info,
+
+                        Screen.SearchByRFID -> Icon(painter = painterResource(id = R.drawable.scan),
                             contentDescription = "Search by RFID",
                             modifier = Modifier.size(40.dp))
                         else -> Icon(Icons.Default.Info, contentDescription = null)
@@ -64,10 +65,10 @@ fun BottomNavBar(navController: NavController) {
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.secondary,
-                    unselectedIconColor = MaterialTheme.colorScheme.tertiary,
+                    unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
                     selectedTextColor = MaterialTheme.colorScheme.secondary,
-                    unselectedTextColor = MaterialTheme.colorScheme.tertiary,
-                    indicatorColor = MaterialTheme.colorScheme.tertiary
+                    unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    indicatorColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
         }

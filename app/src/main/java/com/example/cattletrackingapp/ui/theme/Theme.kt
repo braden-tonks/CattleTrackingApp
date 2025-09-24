@@ -1,6 +1,5 @@
 package com.example.cattletrackingapp.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -15,15 +14,17 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = Red,
     secondary = LightRed,
-    tertiary = White,
-    background = LightRed
+    tertiary = Brown,
+    background = backgroundColor,
+    onPrimary = White
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Red,
     secondary = LightRed,
-    tertiary = White,
-    background = LightRed
+    tertiary = Brown,
+    background = backgroundColor,
+    onPrimary = White
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
