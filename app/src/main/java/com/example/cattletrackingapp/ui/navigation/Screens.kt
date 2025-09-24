@@ -6,4 +6,7 @@ sealed class Screen(val route: String) {
     object SearchByRFID : Screen("search_by_rfid")
     object AddCattle : Screen("add_cattle")
     object CattleList : Screen("cattle_list")
+    companion object {
+
+    }
 }
