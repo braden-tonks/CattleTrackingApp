@@ -6,7 +6,7 @@ import io.github.jan.supabase.postgrest.from
 class CowsApi {
     private val client = SupabaseClientProvider.client
 
-    suspend fun getFarmers(): List<Cow> {
+    suspend fun getCows(): List<Cow> {
         return client.from("cows")
             .select()
             .decodeList()

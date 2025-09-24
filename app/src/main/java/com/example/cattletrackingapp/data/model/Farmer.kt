@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Farmer(
-    val id: Int,
+    val id: String,
+    val email: String,
     val name: String,
     val created_at: String
 )

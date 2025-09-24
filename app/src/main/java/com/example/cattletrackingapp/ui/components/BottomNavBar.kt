@@ -50,6 +50,7 @@ fun BottomNavBar(navController: NavController) {
                         Screen.SearchByRFID -> Icon(Icons.Default.Info,
                             contentDescription = "Search by RFID",
                             modifier = Modifier.size(40.dp))
+                        else -> Icon(Icons.Default.Info, contentDescription = null)
                     }
                 },
                 label = { Text(screen.route.replace("_", " ").replaceFirstChar { it.uppercase() },
@@ -57,9 +58,8 @@ fun BottomNavBar(navController: NavController) {
                 selected = currentDestination?.route == screen.route,
                 onClick = {
                     navController.navigate(screen.route) {
-                        popUpTo(Screen.Home.route) { saveState = true }
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
