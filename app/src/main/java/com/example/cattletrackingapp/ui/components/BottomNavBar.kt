@@ -16,8 +16,8 @@ import com.example.cattletrackingapp.ui.navigation.Screen
 @Composable
 fun BottomNavBar(navController: NavController) {
     val items = listOf(
-        Screen.Home,
         Screen.SearchByName,
+        Screen.Home,
         Screen.SearchByRFID
     )
 
@@ -31,15 +31,15 @@ fun BottomNavBar(navController: NavController) {
                         Screen.Home -> Icon(Icons.Default.Home, contentDescription = "Home")
                         Screen.SearchByName -> Icon(Icons.Default.Search, contentDescription = "Search by Name")
                         Screen.SearchByRFID -> Icon(Icons.Default.Info, contentDescription = "Search by RFID")
+                        else -> Icon(Icons.Default.Info, contentDescription = null)
                     }
                 },
                 label = { Text(screen.route.replace("_", " ").replaceFirstChar { it.uppercase() }) },
                 selected = currentDestination?.route == screen.route,
                 onClick = {
                     navController.navigate(screen.route) {
-                        popUpTo(Screen.Home.route) { saveState = true }
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 }
             )

@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.cattletrackingapp.ui.components.BottomNavBar
+import com.example.cattletrackingapp.ui.screens.AddCowScreen
+import com.example.cattletrackingapp.ui.screens.CattleListScreen
 import com.example.cattletrackingapp.ui.screens.HomeScreen
 import com.example.cattletrackingapp.ui.screens.SearchByNameScreen
 import com.example.cattletrackingapp.ui.screens.SearchByRFIDScreen
@@ -27,6 +29,8 @@ fun MainNavHost() {
             composable(Screen.Home.route) { HomeScreen(navController) }
             composable(Screen.SearchByName.route) { SearchByNameScreen(navController) }
             composable(Screen.SearchByRFID.route) { SearchByRFIDScreen(navController) }
+            composable(Screen.AddCattle.route) { AddCowScreen(navController) }
+            composable(Screen.CattleList.route) { CattleListScreen(navController) }
         }
     }
 }
