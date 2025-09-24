@@ -30,6 +30,7 @@ fun FarmersScreen(
     } else {
         LazyColumn {
             items(farmers, key = { it.id }) { farmer ->
+                Text(farmer.created_at, modifier = Modifier.padding(8.dp))
                 Text(farmer.name, modifier = Modifier.padding(8.dp))
             }
         }
