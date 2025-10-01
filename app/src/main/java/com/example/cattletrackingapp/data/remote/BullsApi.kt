@@ -1,10 +1,11 @@
 package com.example.cattletrackingapp.data.remote
 
 import com.example.cattletrackingapp.data.model.Bull
+import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import jakarta.inject.Inject
 
-class BullsApi {
-    private val client = SupabaseClientProvider.client
+class BullsApi @Inject constructor (private val client: SupabaseClient){
 
     suspend fun getBulls(): List<Bull> {
         return client.from("bulls")

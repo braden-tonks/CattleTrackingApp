@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.cattle
+package com.example.cattletrackingapp.ui.UIModel
 
 import com.example.cattletrackingapp.data.model.Cow // your Supabase model (snake_case fields)
 

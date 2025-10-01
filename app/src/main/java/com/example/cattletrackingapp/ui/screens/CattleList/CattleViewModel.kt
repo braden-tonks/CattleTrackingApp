@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.cattle
+package com.example.cattletrackingapp.ui.screens.CattleList
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,12 +6,17 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cattletrackingapp.data.repository.CowsRepository
+import com.example.cattletrackingapp.ui.UIModel.toUi
+import com.example.cattletrackingapp.ui.cattle.CattleUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 // ViewModel: survives configuration changes (like screen rotation)
 // and holds the cattle list state for the UI.
-class CattleViewModel(
-    private val repo: CowsRepository = CowsRepository()
+class CattleViewModel @Inject constructor(
+    private val repo: CowsRepository
 ) : ViewModel() {
 
     // UI state that Compose will observe

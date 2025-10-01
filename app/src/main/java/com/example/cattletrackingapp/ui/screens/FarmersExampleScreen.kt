@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens
+/*package com.example.cattletrackingapp.ui.screens
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,3 +36,5 @@ fun FarmersScreen(
         }
     }
 }
+
+ */

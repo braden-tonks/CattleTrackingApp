@@ -1,11 +1,11 @@
 // app/src/main/java/com/example/cattletrackingapp/ui/screens/CattleListScreen.kt
-package com.example.cattletrackingapp.ui.screens
+package com.example.cattletrackingapp.ui.screens.CattleList
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
@@ -16,16 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cattletrackingapp.ui.cattle.CattleViewModel
-import com.example.cattletrackingapp.ui.cattle.CowUi
+import com.example.cattletrackingapp.ui.UIModel.CowUi
 import com.example.cattletrackingapp.ui.navigation.Screen
 
 @Composable
 fun CattleListScreen(navController: NavController) {
     // Get ViewModel and its observable state (cows, loading, error)
-    val vm: CattleViewModel = viewModel()
+    val vm: CattleViewModel = hiltViewModel()
     val state = vm.uiState
 
     Column(

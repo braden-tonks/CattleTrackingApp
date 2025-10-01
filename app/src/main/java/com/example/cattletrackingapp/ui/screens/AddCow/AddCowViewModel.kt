@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.viewModel
+package com.example.cattletrackingapp.ui.screens.AddCow
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,9 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cattletrackingapp.data.model.Cow
 import com.example.cattletrackingapp.data.repository.CowsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
-class AddCowViewModel(private val repo: CowsRepository) : ViewModel() {
+@HiltViewModel
+class AddCowViewModel @Inject constructor(
+    private val repo: CowsRepository
+) : ViewModel() {
 
     var saveState by mutableStateOf<String?>(null)
         private set

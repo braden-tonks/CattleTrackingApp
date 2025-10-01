@@ -9,6 +9,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cattletrackingapp.data.repository.CowsRepository
+import com.example.cattletrackingapp.ui.UIModel.CowUi
+import com.example.cattletrackingapp.ui.UIModel.toUi
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 data class CattleUiState(
@@ -17,8 +21,9 @@ data class CattleUiState(
     val error: String? = null
 )
 
-class CattleListViewModel(
-    private val repo: CowsRepository = CowsRepository()
+@HiltViewModel
+class CattleListViewModel @Inject constructor(
+    private val repo: CowsRepository
 ) : ViewModel() {
 
     var uiState by mutableStateOf(CattleUiState())

@@ -6,9 +6,13 @@ import com.example.cattletrackingapp.data.model.Farmer
 import com.example.cattletrackingapp.data.remote.CowsApi
 import com.example.cattletrackingapp.data.model.Cow
 import com.example.cattletrackingapp.data.remote.FarmersApi
+import dagger.hilt.android.scopes.ViewModelScoped
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
-class CowsRepository (
-    private val api: CowsApi = CowsApi()
+@Singleton
+class CowsRepository @Inject constructor(
+    private val api: CowsApi
 ){
 
     suspend fun addCow(cow: Cow): Boolean {
