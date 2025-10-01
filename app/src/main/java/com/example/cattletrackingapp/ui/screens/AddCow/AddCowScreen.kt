@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens
+package com.example.cattletrackingapp.ui.screens.AddCow
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,12 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.data.model.Cow
-import com.example.cattletrackingapp.data.repository.CowsRepository
-import com.example.cattletrackingapp.ui.viewModel.AddCowViewModel
-import com.example.cattletrackingapp.ui.viewModel.AddCowViewModelFactory
+import com.example.cattletrackingapp.ui.screens.AddCow.AddCowViewModel
 
 @Composable
 fun AddCowScreen(navController: NavController) {
@@ -34,9 +32,7 @@ fun AddCowScreen(navController: NavController) {
     var birthDateError by remember { mutableStateOf<String?>(null) }
     var remarks by remember { mutableStateOf("") }
 
-    val viewModel: AddCowViewModel = viewModel(
-        factory = AddCowViewModelFactory(CowsRepository())
-    )
+    val viewModel: AddCowViewModel = hiltViewModel()
     val saveState = viewModel.saveState // observe ViewModel result
 
 
@@ -170,9 +166,9 @@ fun AddCowScreen(navController: NavController) {
 
         if (saveState != null) {
             Text(
-                text = saveState!!,
+                text = saveState,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (saveState!!.contains("Saved")) MaterialTheme.colorScheme.primary
+                color = if (saveState.contains("Saved")) MaterialTheme.colorScheme.primary
                 else MaterialTheme.colorScheme.error
             )
         }
