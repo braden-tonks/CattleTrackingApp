@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.data.model.Cow
+import com.example.cattletrackingapp.ui.components.DatePickerField
 import com.example.cattletrackingapp.ui.screens.AddCow.AddCowViewModel
 
 @Composable
@@ -44,34 +48,17 @@ fun AddCowScreen(navController: NavController) {
             valid = false
         }
 
-        // Example: birth date must be chosen
-        if (birthDate.isBlank()) {
-            birthDateError = "Please select a birth date"
-            valid = false
-        }
-
-        if (birthDate.length != 10) {
-            birthDateError = "Invalid date format"
-            valid = false
-        } else if (birthDate.substring(2, 3) != "/" || birthDate.substring(5, 6) != "/") {
-            birthDateError = "Invalid date format"
-            valid = false
-        } else if (birthDate.substring(0, 2).toInt() > 12 || birthDate.substring(0, 2)
-                .toInt() < 1
-        ) {
-            birthDateError = "Invalid date format"
-            valid = false
-        } else if (birthDate.substring(3, 5).toInt() > 31 || birthDate.substring(3, 5).toInt() < 1) {
-            birthDateError = "Invalid date format"
-        valid = false
-        }
-
-
         // More rules: numeric only, length limits, etc.
 
         return valid
     }
 
+
+    LaunchedEffect(saveState.success) {
+        if (saveState.success == true) {
+            navController.popBackStack() // goes back to cattle list
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -116,25 +103,12 @@ fun AddCowScreen(navController: NavController) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        // DOB field (as a string for now)
-        OutlinedTextField(
-            value = birthDate,
-            onValueChange = {
-                birthDate = it
-                birthDateError = null // reset error while typing
-            },
-            label = { Text("Birth Date (mm/dd/yyyy)") },
-            modifier = Modifier.fillMaxWidth(),
-            isError = birthDateError != null
+        // birthDate date picker field
+        DatePickerField(
+            label = "Birth Date",
+            selectedDate = birthDate,
+            onDateSelected = { birthDate = it }
         )
-
-        if (birthDateError != null) {
-            Text(
-                text = birthDateError ?: "",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
 
         // Remarks field
         OutlinedTextField(
@@ -159,18 +133,18 @@ fun AddCowScreen(navController: NavController) {
                     viewModel.saveCow(cow)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !saveState.loading
         ) {
-            Text("Save Cattle")
-        }
-
-        if (saveState != null) {
-            Text(
-                text = saveState,
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (saveState.contains("Saved")) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.error
-            )
+            if (saveState.loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                Text("Save Cattle")
+            }
         }
     }
 }
