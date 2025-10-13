@@ -1,6 +1,7 @@
 package com.example.cattletrackingapp.data.remote
 
 import com.example.cattletrackingapp.data.model.Calf
+import com.example.cattletrackingapp.data.model.Cow
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import jakarta.inject.Inject
@@ -11,5 +12,15 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
         return client.from("calves")
             .select()
             .decodeList()
+    }
+
+    suspend fun insertCalf(calf: Calf): Boolean {
+        return try {
+            client.from("calves").insert(calf)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 }
