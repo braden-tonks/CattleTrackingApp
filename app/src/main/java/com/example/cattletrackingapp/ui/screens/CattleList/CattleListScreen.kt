@@ -89,8 +89,10 @@ fun CattleListScreen(navController: NavController) {
                         CowRow(
                             cow = cow,
                             onClick = {
-                                // Only navigate if you’ve defined a details route:
-                                // navController.navigate("${Screen.CattleDetails.route}/${cow.id}")
+                                if (cow.id.isNotEmpty()) {
+                                    navController.navigate(
+                                        com.example.cattletrackingapp.ui.navigation.Screen.CowDetail.routeWithId(cow.id))
+                                }
                             }
                         )
                     }
@@ -105,11 +107,10 @@ private fun CowRow(
     cow: CowUi,
     onClick: () -> Unit
 ) {
-    // Card for each cow entry
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }, // clickable for details
+            .clickable { onClick() },
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -120,40 +121,21 @@ private fun CowRow(
                 .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Column with cow details
-            Column(Modifier.weight(1f)) {
-                Text(
-                    text = "Tag ${cow.tagNumber}",
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = "Dam: ${cow.damNumber}  •  Sire: ${cow.sireNumber}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = "Birth: ${cow.birthDate}",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                if (cow.remarks.isNotBlank()) {
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text = cow.remarks,
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-            Spacer(Modifier.width(12.dp))
-            // Arrow icon to suggest navigation
+            // Only the tag number
+            Text(
+                text = "Tag ${cow.tagNumber}",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(1f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
-            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+            // Keep the arrow to indicate navigation
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = null
+            )
         }
     }
 }

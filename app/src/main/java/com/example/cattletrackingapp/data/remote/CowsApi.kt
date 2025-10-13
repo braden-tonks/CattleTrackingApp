@@ -7,7 +7,8 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import jakarta.inject.Inject
 
-class CowsApi @Inject constructor (private val client: SupabaseClient){
+
+class CowsApi @Inject constructor (private val client: SupabaseClient) {
 
     suspend fun getCows(): List<Cow> {
         return client.from("cows")
@@ -24,4 +25,12 @@ class CowsApi @Inject constructor (private val client: SupabaseClient){
             false
         }
     }
+
+    suspend fun getCowById(id: String): Cow? {
+        return client.from("cows")
+            .select()
+            .decodeList<Cow>()
+            .firstOrNull { it.id == id }
+    }
+
 }
