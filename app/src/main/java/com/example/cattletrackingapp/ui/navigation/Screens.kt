@@ -12,6 +12,9 @@ sealed class Screen(val route: String) {
         fun routeWithId(cowId: String) = "cow_detail/$cowId"
         const val ARG_ID = "cowId"
     }
+    object AddCalf : Screen("add_calf")
+    object AddBull : Screen("add_bull")
+    object ChooseAddCattle : Screen("choose_add_cattle")
     companion object {
 
     }

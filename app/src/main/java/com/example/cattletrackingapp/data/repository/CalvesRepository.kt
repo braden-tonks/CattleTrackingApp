@@ -1,4 +1,16 @@
 package com.example.cattletrackingapp.data.repository
 
-class CalvesRepository {
+import com.example.cattletrackingapp.data.model.Calf
+import com.example.cattletrackingapp.data.remote.CalvesApi
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class CalvesRepository @Inject constructor(
+    private val api: CalvesApi
+) {
+
+    suspend fun addCalf(calf: Calf): Boolean {
+        return api.insertCalf(calf)
+    }
 }

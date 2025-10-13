@@ -14,3 +14,9 @@ data class Cow (
     val remarks: String? = null,
     val created_at: String? = null
 )
+
+@Serializable
+data class CowIdAndTag(
+    val id: String,
+    val tag_number: String
+)
