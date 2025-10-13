@@ -21,6 +21,8 @@ class CowsRepository @Inject constructor(
         return api.getCows()
     }
 
+    suspend fun getCowById(id: String): Cow? {
+        return api.getCowById(id)
     suspend fun fetchCattleIdsAndTags(): List<CowIdAndTag> {
         return api.getCowIdsAndTags()
     }
