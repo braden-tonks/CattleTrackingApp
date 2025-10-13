@@ -66,7 +66,7 @@ fun AddCowScreen(navController: NavController) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(text = "Add New Cattle", style = MaterialTheme.typography.headlineSmall)
+        Text(text = "Add New Cow", style = MaterialTheme.typography.headlineSmall)
 
         // tagNumber field
         OutlinedTextField(
@@ -143,7 +143,7 @@ fun AddCowScreen(navController: NavController) {
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
-                Text("Save Cattle")
+                Text("Save Cow")
             }
         }
     }
