@@ -20,7 +20,7 @@ class BullsRepository @Inject constructor(
         return api.insertBull(bull)
     }
 
-    suspend fun fetchCattleList(): List<Bull> {
+    suspend fun fetchBullsList(): List<Bull> {
         return api.getBulls()
     }
 }
