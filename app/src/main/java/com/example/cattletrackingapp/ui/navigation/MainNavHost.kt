@@ -1,0 +1,62 @@
+package com.example.cattletrackingapp.ui.navigation
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.cattletrackingapp.ui.components.BottomNavBar
+import com.example.cattletrackingapp.ui.screens.AddCalf.AddCalfScreen
+import com.example.cattletrackingapp.ui.screens.AddBull.AddBullScreen
+import com.example.cattletrackingapp.ui.screens.AddCattleScreen
+import com.example.cattletrackingapp.ui.screens.AddCow.AddCowScreen
+import com.example.cattletrackingapp.ui.screens.CalfDetail.CalfDetailScreen
+import com.example.cattletrackingapp.ui.screens.HerdList.HerdListScreen
+import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
+import com.example.cattletrackingapp.ui.screens.HomeScreen
+import com.example.cattletrackingapp.ui.screens.SearchByNameScreen
+import com.example.cattletrackingapp.ui.screens.SearchByRFIDScreen
+
+@Composable
+fun MainNavHost() {
+    val navController = rememberNavController()
+
+    Scaffold(
+        bottomBar = { BottomNavBar(navController) }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(Screen.Home.route) { HomeScreen(navController) }
+            composable(Screen.SearchByName.route) { SearchByNameScreen(navController) }
+            composable(Screen.SearchByRFID.route) { SearchByRFIDScreen(navController) }
+            composable(Screen.AddCattle.route) { AddCowScreen(navController) }
+            //Created by Eli Herigon
+            //dynamic screen, meaning it is passing through the specific cow so it knows which cow to get details on
+            composable(Screen.CowDetail.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString(Screen.CowDetail.ARG_ID).orEmpty()
+                CowDetailScreen(navController, id)
+            }
+            //Create by Nick Heislen
+            //Brings you to the add Calf Page
+            composable(Screen.AddCalf.route) { AddCalfScreen(navController) }
+
+
+            composable(Screen.AddBull.route) { AddBullScreen(navController) }
+            composable(Screen.ChooseAddCattle.route) { AddCattleScreen(navController) }
+
+            //Takes you to a calf detail page
+            composable(Screen.CalfDetail.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("calfId") ?: ""
+                CalfDetailScreen(calfId = id, navController = navController)
+            }
+
+            composable(Screen.HerdList.route) { HerdListScreen(navController) }
+
+        }
+    }
+}
