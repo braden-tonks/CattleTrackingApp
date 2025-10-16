@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import com.example.cattletrackingapp.ui.components.InfoCards
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,10 +38,7 @@ fun CowDetailScreen(
                     IconButton(
                         onClick = {
                             // Go straight back to the list even if user didn’t come from it
-                            navController.popBackStack(
-                                com.example.cattletrackingapp.ui.navigation.Screen.CattleList.route,
-                                inclusive = false
-                            )
+                            navController.popBackStack()
                         }
                     ) {
                         // Use automirrored back arrow if available; else fallback
@@ -70,33 +68,14 @@ fun CowDetailScreen(
 
 @Composable
 private fun CowDetailContent(cow: CowUi) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Text(
-            text = "Tag #${cow.tagNumber}",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
+    InfoCards(
+        title = "Tag #${cow.tagNumber}",
+        fields = listOf(
+            "Birth date" to cow.birthDate,
+            "Dam #" to cow.damNumber,
+            "Sire #" to cow.sireNumber,
+            "Remarks" to cow.remarks,
+            "Created at" to cow.createdAt
         )
-        ElevatedCard(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                LabeledValue("Birth date", cow.birthDate)
-                LabeledValue("Dam #", cow.damNumber)
-                LabeledValue("Sire #", cow.sireNumber)
-                if (cow.remarks.isNotBlank()) LabeledValue("Remarks", cow.remarks)
-                if (cow.createdAt.isNotBlank()) LabeledValue("Created at", cow.createdAt)
-            }
-        }
-    }
-}
-
-@Composable
-private fun LabeledValue(label: String, value: String) {
-    Column {
-        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
-        Text(value, style = MaterialTheme.typography.bodyLarge)
-    }
+    )
 }
