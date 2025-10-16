@@ -10,7 +10,15 @@ class CalvesRepository @Inject constructor(
     private val api: CalvesApi
 ) {
 
+    suspend fun fetchCalves(): List<Calf> {
+        return api.getCalves()
+    }
+
     suspend fun addCalf(calf: Calf): Boolean {
         return api.insertCalf(calf)
+    }
+
+    suspend fun getCalfById(id: String): Calf? {
+        return api.getCalfById(id)
     }
 }

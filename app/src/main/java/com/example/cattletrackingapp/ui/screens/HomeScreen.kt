@@ -41,8 +41,8 @@ fun HomeScreen(navController: NavController) {
     )
 
     val menuItems = listOf(
-        MenuItem("Cattle List", Screen.CattleList.route, Icons.AutoMirrored.Filled.List),
-        MenuItem("Add Cattle", Screen.ChooseAddCattle.route, Icons.Default.Add)
+        MenuItem("Add Cattle", Screen.ChooseAddCattle.route, Icons.Default.Add),
+        MenuItem("Herd List", Screen.HerdList.route, Icons.AutoMirrored.Filled.List)
     )
 
     LazyVerticalGrid(

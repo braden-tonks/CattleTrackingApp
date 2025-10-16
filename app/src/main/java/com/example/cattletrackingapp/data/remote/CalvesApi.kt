@@ -23,4 +23,11 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
             false
         }
     }
+
+    suspend fun getCalfById(id: String): Calf? {
+        return client.from("calves")
+            .select()
+            .decodeList<Calf>()
+            .firstOrNull { it.id == id }
+    }
 }

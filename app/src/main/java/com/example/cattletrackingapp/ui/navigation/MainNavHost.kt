@@ -12,7 +12,8 @@ import com.example.cattletrackingapp.ui.screens.AddCalf.AddCalfScreen
 import com.example.cattletrackingapp.ui.screens.AddBull.AddBullScreen
 import com.example.cattletrackingapp.ui.screens.AddCattleScreen
 import com.example.cattletrackingapp.ui.screens.AddCow.AddCowScreen
-import com.example.cattletrackingapp.ui.screens.CattleList.CattleListScreen
+import com.example.cattletrackingapp.ui.screens.CalfDetail.CalfDetailScreen
+import com.example.cattletrackingapp.ui.screens.HerdList.HerdListScreen
 import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
 import com.example.cattletrackingapp.ui.screens.HomeScreen
 import com.example.cattletrackingapp.ui.screens.SearchByNameScreen
@@ -34,16 +35,28 @@ fun MainNavHost() {
             composable(Screen.SearchByName.route) { SearchByNameScreen(navController) }
             composable(Screen.SearchByRFID.route) { SearchByRFIDScreen(navController) }
             composable(Screen.AddCattle.route) { AddCowScreen(navController) }
-            composable(Screen.CattleList.route) { CattleListScreen(navController) }
+            //Created by Eli Herigon
             //dynamic screen, meaning it is passing through the specific cow so it knows which cow to get details on
             composable(Screen.CowDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString(Screen.CowDetail.ARG_ID).orEmpty()
                 CowDetailScreen(navController, id)
             }
-
+            //Create by Nick Heislen
+            //Brings you to the add Calf Page
             composable(Screen.AddCalf.route) { AddCalfScreen(navController) }
+
+
             composable(Screen.AddBull.route) { AddBullScreen(navController) }
             composable(Screen.ChooseAddCattle.route) { AddCattleScreen(navController) }
+
+            //Takes you to a calf detail page
+            composable(Screen.CalfDetail.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("calfId") ?: ""
+                CalfDetailScreen(calfId = id, navController = navController)
+            }
+
+            composable(Screen.HerdList.route) { HerdListScreen(navController) }
+
         }
     }
 }

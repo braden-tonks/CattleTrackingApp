@@ -6,16 +6,24 @@ sealed class Screen(val route: String) {
     object SearchByRFID : Screen("search_by_rfid")
     object AddCattle : Screen("add_cattle")
 
-    object CattleList : Screen("cattle_list")
-
     object CowDetail : Screen("cow_detail/{cowId}") {
-        fun routeWithId(cowId: String) = "cow_detail/$cowId"
+        fun routeWithId(cowId: String?) = "cow_detail/$cowId"
         const val ARG_ID = "cowId"
     }
     object AddCalf : Screen("add_calf")
+
+
+    //Nick Heislen 10/14/2023
+    object CalfDetail : Screen("calf_detail/{calfId}") {
+        fun routeWithId(id: String?) = "calf_detail/$id"
+    }
+
     object AddBull : Screen("add_bull")
     object ChooseAddCattle : Screen("choose_add_cattle")
     companion object {
 
     }
+
+    object HerdList : Screen("herd_list")
+
 }
