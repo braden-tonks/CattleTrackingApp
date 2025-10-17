@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens.AddBull
+package com.example.cattletrackingapp.ui.screens.AddPages.AddCalf
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,19 +21,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cattletrackingapp.data.model.Bull
+import com.example.cattletrackingapp.data.model.Calf
 import com.example.cattletrackingapp.ui.components.DatePickerField
+import com.example.cattletrackingapp.ui.components.PicklistField
+import com.example.cattletrackingapp.ui.components.SearchableDropdownField
 
 @Composable
-fun AddBullScreen(navController: NavController) {
+fun AddCalfScreen(navController: NavController) {
     // State for form fields
     var tagNumber by remember { mutableStateOf("") }
     var tagNumberError by remember { mutableStateOf<String?>(null) }
-    var bullName by remember { mutableStateOf("") }
-    var dateIn by remember { mutableStateOf("") }
+    var cowId by remember { mutableStateOf("") }
+    var damNumber by remember { mutableStateOf("") }
+    var damNumberError by remember { mutableStateOf<String?>(null) }
+    var bullId by remember { mutableStateOf("") }
+    var sireNumber by remember { mutableStateOf("") }
+    var sireNumberError by remember { mutableStateOf<String?>(null) }
+    var birthDate by remember { mutableStateOf("") }
+    var birthDateError by remember { mutableStateOf<String?>(null) }
+    var sex by remember { mutableStateOf("") }
     var remarks by remember { mutableStateOf("") }
 
-    val viewModel: AddBullViewModel = hiltViewModel()
+    val viewModel: AddCalfViewModel = hiltViewModel()
     val saveState = viewModel.saveState // observe ViewModel result
 
 
@@ -44,12 +54,20 @@ fun AddBullScreen(navController: NavController) {
             valid = false
         }
 
-
-        // More rules: numeric only, length limits, etc.
+        if (birthDate.isBlank()) {
+            birthDateError = "Birth date is required"
+            valid = false
+        }
 
         return valid
     }
 
+
+    LaunchedEffect(saveState.success) {
+        if (saveState.success == true) {
+            navController.popBackStack() // goes back to cattle list
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -57,7 +75,7 @@ fun AddBullScreen(navController: NavController) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(text = "Add New Bull", style = MaterialTheme.typography.headlineSmall)
+        Text(text = "Add New Calf", style = MaterialTheme.typography.headlineSmall)
 
         // tagNumber field
         OutlinedTextField(
@@ -78,21 +96,43 @@ fun AddBullScreen(navController: NavController) {
             )
         }
 
-        // Bull Name field
-        OutlinedTextField(
-            value = bullName,
-            onValueChange = { bullName = it },
-            label = { Text("Bull Name") },
-            modifier = Modifier.fillMaxWidth()
+        PicklistField(
+            label = "Sex",
+            options = listOf("Male", "Female"),
+            selectedOption = sex,
+            onOptionSelected = { sex = it }
+        )
+
+        // Dam Number
+        SearchableDropdownField(
+            label = "Dam (Cow Tag)",
+            options = viewModel.cowTags,
+            optionLabel = { it.tag_number },
+            selectedLabel = damNumber,
+            onOptionSelected = {
+                damNumber = it.tag_number
+                cowId = it.id
+            }
+        )
+
+        // Sire Number
+        SearchableDropdownField(
+            label = "Sire (Bull Tag)",
+            options = viewModel.bullTags,
+            optionLabel = { it.tag_number },
+            selectedLabel = sireNumber,
+            onOptionSelected = {
+                sireNumber = it.tag_number
+                bullId = it.id
+            }
         )
 
         // birthDate date picker field
         DatePickerField(
-            label = "Date In",
-            selectedDate = dateIn,
-            onDateSelected = { dateIn = it }
+            label = "Birth Date",
+            selectedDate = birthDate,
+            onDateSelected = { birthDate = it }
         )
-
 
         // Remarks field
         OutlinedTextField(
@@ -106,14 +146,18 @@ fun AddBullScreen(navController: NavController) {
         Button(
             onClick = {
                 if (validateForm()) {
-                    val bull = Bull(
+                    val calf = Calf(
                         farmer_id = "c56b4b3c-ab3b-4782-80e4-3204b14ee635",
                         tag_number = tagNumber,
-                        bull_name = bullName.ifBlank { null },
-                        date_in = dateIn.ifBlank { null },
+                        cow_id = cowId,
+                        bull_id = bullId,
+                        dam_number = damNumber,
+                        sire_number = sireNumber,
+                        birth_date = birthDate,
+                        sex = sex,
                         remarks = remarks.ifBlank { null }
                     )
-                    viewModel.saveBull(bull)
+                    viewModel.saveCalf(calf)
                 }
             },
             modifier = Modifier.fillMaxWidth(),
@@ -126,7 +170,7 @@ fun AddBullScreen(navController: NavController) {
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
-                Text("Save Cattle")
+                Text("Save Calf")
             }
         }
     }

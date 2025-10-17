@@ -1,70 +1,35 @@
-package com.example.cattletrackingapp.ui.screens.AddCalf
+package com.example.cattletrackingapp.ui.screens.AddPages.AddBull
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
-import com.example.cattletrackingapp.data.model.BullIdAndTag
-import com.example.cattletrackingapp.data.model.Calf
-import com.example.cattletrackingapp.data.model.Cow
-import com.example.cattletrackingapp.data.model.CowIdAndTag
+import com.example.cattletrackingapp.data.model.Bull
 import com.example.cattletrackingapp.data.repository.BullsRepository
-import com.example.cattletrackingapp.data.repository.CalvesRepository
-import com.example.cattletrackingapp.data.repository.CowsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
-data class AddCalfUiState(
+data class AddBullUiState(
     val loading: Boolean = false,
     val success: Boolean? = null, // null = idle, true = saved, false = error
     val errorMessage: String? = null
 )
 
 @HiltViewModel
-class AddCalfViewModel @Inject constructor(
-    private val cowRepo: CowsRepository,
-    private val bullRepo: BullsRepository,
-    private val calveRepo: CalvesRepository
+class AddBullViewModel @Inject constructor(
+    private val repo: BullsRepository
 ) : ViewModel() {
 
-    var saveState by mutableStateOf(AddCalfUiState())
+    var saveState by mutableStateOf(AddBullUiState())
         private set
 
-    var cowTags by mutableStateOf<List<CowIdAndTag>>(emptyList())
-        private set
-
-    var bullTags by mutableStateOf<List<BullIdAndTag>>(emptyList())
-        private set
-
-
-    init {
-        loadCowTags()
-        loadBullTags()
-    }
-
-    private fun loadCowTags() {
-        viewModelScope.launch {
-            cowTags = runCatching { cowRepo.fetchCattleIdsAndTags() }
-                .getOrElse { emptyList() }
-        }
-    }
-
-    private fun loadBullTags() {
-        viewModelScope.launch {
-            bullTags = runCatching { bullRepo.fetchBullIdsAndTags() }
-                .getOrElse { emptyList() }
-        }
-    }
-
-
-    fun saveCalf(calf: Calf) {
+    fun saveBull(bull: Bull) {
         saveState = saveState.copy(loading = true, success = null, errorMessage = null)
 
         viewModelScope.launch {
-            runCatching { calveRepo.addCalf(calf) }
+            runCatching { repo.addBull(bull) }
                 .onSuccess {
                     if (it) {
                         saveState = saveState.copy(loading = false, success = true)
