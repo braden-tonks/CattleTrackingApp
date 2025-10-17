@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens.CalfDetail
+package com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

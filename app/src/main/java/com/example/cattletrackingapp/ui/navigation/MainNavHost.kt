@@ -8,11 +8,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.cattletrackingapp.ui.components.BottomNavBar
-import com.example.cattletrackingapp.ui.screens.AddCalf.AddCalfScreen
-import com.example.cattletrackingapp.ui.screens.AddBull.AddBullScreen
+import com.example.cattletrackingapp.ui.screens.AddPages.AddCalf.AddCalfScreen
+import com.example.cattletrackingapp.ui.screens.AddPages.AddBull.AddBullScreen
 import com.example.cattletrackingapp.ui.screens.AddCattleScreen
-import com.example.cattletrackingapp.ui.screens.AddCow.AddCowScreen
-import com.example.cattletrackingapp.ui.screens.CalfDetail.CalfDetailScreen
+import com.example.cattletrackingapp.ui.screens.AddPages.AddCow.AddCowScreen
+import com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail.CalfDetailScreen
 import com.example.cattletrackingapp.ui.screens.HerdList.HerdListScreen
 import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
 import com.example.cattletrackingapp.ui.screens.HomeScreen
