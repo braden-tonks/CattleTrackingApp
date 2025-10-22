@@ -19,6 +19,7 @@ import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
 import com.example.cattletrackingapp.ui.screens.HomeScreen
 import com.example.cattletrackingapp.ui.screens.SearchByNameScreen
 import com.example.cattletrackingapp.ui.screens.SearchByRFIDScreen
+import com.example.cattletrackingapp.ui.screens.vaccinations.VaccinationsScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.DashBoardScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightListScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightModuleScreen
@@ -39,6 +40,7 @@ fun MainNavHost() {
             composable(Screen.SearchByName.route) { SearchByNameScreen(navController) }
             composable(Screen.SearchByRFID.route) { SearchByRFIDScreen(navController) }
             composable(Screen.AddCattle.route) { AddCowScreen(navController) }
+            composable (Screen.Vaccinations.route) { VaccinationsScreen(navController) }
             //Created by Eli Herigon
             //dynamic screen, meaning it is passing through the specific cow so it knows which cow to get details on
             composable(Screen.CowDetail.route) { backStackEntry ->
