@@ -1,79 +1,124 @@
 package com.example.cattletrackingapp.ui.screens.cowdetail
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cattletrackingapp.ui.UIModel.CowUi
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import com.example.cattletrackingapp.ui.components.InfoCards
-
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.example.cattletrackingapp.R
+import com.example.cattletrackingapp.ui.screens.DetailPages.CowDetail.CowUi
+import com.example.cattletrackingapp.ui.components.CalfListSection
+import com.example.cattletrackingapp.ui.components.DetailHeader
+import com.example.cattletrackingapp.ui.components.DetailTabRow
+import com.example.cattletrackingapp.ui.components.InfoRow
+import com.example.cattletrackingapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CowDetailScreen(
     navController: NavController,
-    cowId: String,
-    vm: CowDetailViewModel = hiltViewModel()
+    cowId: String
 ) {
-    LaunchedEffect(cowId) { vm.load(cowId) }
-    val state = vm.uiState
+    val vm: CowDetailViewModel = hiltViewModel()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Cow Details") },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            // Go straight back to the list even if user didn’t come from it
-                            navController.popBackStack()
-                        }
-                    ) {
-                        // Use automirrored back arrow if available; else fallback
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )
-        }
-    ) { inner ->
-        when {
-            state.loading -> Box(Modifier.fillMaxSize().padding(inner), contentAlignment = Alignment.Center) {
+    LaunchedEffect(cowId) {
+        vm.loadCowDetails(cowId)
+    }
+    val state by vm.uiState.collectAsState()
+
+    when {
+        state.loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 CircularProgressIndicator()
             }
-            state.error != null -> Box(Modifier.fillMaxSize().padding(inner), contentAlignment = Alignment.Center) {
-                Text(state.error!!)
+        }
+
+        state.error != null -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Text(
+                    "Error: ${state.error}",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
-            state.cow != null -> Box(Modifier.fillMaxSize().padding(inner)) {
-                CowDetailContent(state.cow!!)
+        }
+
+        state.cow != null -> {
+            // Show the cow details content
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                DetailHeader(
+                    iconPainter = painterResource(R.drawable.cow_detail_icon),
+                    tagNumber = "Tag # ${state.cow!!.tagNumber}",
+                    type = "Cow"
+                )
+
+                var selectedTab by remember { mutableStateOf(0) }
+
+                DetailTabRow(
+                    tabs = listOf("Details", "Vaccines", "Calves"),
+                    selectedTabIndex = selectedTab,
+                    onTabSelected = { selectedTab = it }
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    when (selectedTab) {
+                        0 -> CowDetailsSection(state.cow!!)
+                        1 -> Text("Vaccines")//VaccinesListSection(state.cowVaccineList)
+                        2 -> CalfListSection(state.calfList, onClick = { calf ->
+                            navController.navigate(Screen.CalfDetail.routeWithId(calf.id))
+                        })
+                    }
+                }
+            }
+        }
+
+        else -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Text(
+                    "Cow details not found",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
         }
     }
 }
 
-
 @Composable
-private fun CowDetailContent(cow: CowUi) {
-    InfoCards(
-        title = "Tag #${cow.tagNumber}",
-        fields = listOf(
-            "Birth date" to cow.birthDate,
-            "Dam #" to cow.damNumber,
-            "Sire #" to cow.sireNumber,
-            "Remarks" to cow.remarks,
-            "Created at" to cow.createdAt
-        )
-    )
+fun CowDetailsSection(cow: CowUi) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 12.dp)
+    ) {
+        item {
+            InfoRow(label = "Tag Number:", value = cow.tagNumber)
+            InfoRow(label = "Date of Birth:", value = cow.birthDate ?: "N/A")
+            InfoRow(label = "Age:", value = cow.age ?: "N/A")
+            InfoRow(label = "Sire Number:", value = cow.sireNumber ?: "N/A")
+            InfoRow(label = "Dam Number:", value = cow.damNumber ?: "N/A")
+            InfoRow(label = "Remarks:", value = cow.remarks ?: "")
+        }
+    }
 }
+

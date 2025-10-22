@@ -12,6 +12,7 @@ import com.example.cattletrackingapp.ui.screens.AddPages.AddCalf.AddCalfScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddBull.AddBullScreen
 import com.example.cattletrackingapp.ui.screens.AddCattleScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCow.AddCowScreen
+import com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail.BullDetailScreen
 import com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail.CalfDetailScreen
 import com.example.cattletrackingapp.ui.screens.HerdList.HerdListScreen
 import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
@@ -53,6 +54,12 @@ fun MainNavHost() {
             composable(Screen.CalfDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("calfId") ?: ""
                 CalfDetailScreen(calfId = id, navController = navController)
+            }
+
+            //Takes you to a bull detail page
+            composable(Screen.BullDetail.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString(Screen.BullDetail.ARG_ID).orEmpty()
+                BullDetailScreen(navController, id)
             }
 
             composable(Screen.HerdList.route) { HerdListScreen(navController) }

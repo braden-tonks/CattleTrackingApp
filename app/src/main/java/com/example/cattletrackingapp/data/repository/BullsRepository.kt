@@ -2,7 +2,6 @@ package com.example.cattletrackingapp.data.repository
 
 import com.example.cattletrackingapp.data.model.Bull
 import com.example.cattletrackingapp.data.model.BullIdAndTag
-import com.example.cattletrackingapp.data.model.CowIdAndTag
 import com.example.cattletrackingapp.data.remote.BullsApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,6 +15,10 @@ class BullsRepository @Inject constructor(
         return api.getBullIdsAndTags()
     }
 
+    suspend fun fetchBullById(id: String): Bull? {
+        return api.getCowById(id)
+    }
+
     suspend fun addBull(bull: Bull): Boolean {
         return api.insertBull(bull)
     }
@@ -23,4 +26,6 @@ class BullsRepository @Inject constructor(
     suspend fun fetchBullsList(): List<Bull> {
         return api.getBulls()
     }
+
+
 }

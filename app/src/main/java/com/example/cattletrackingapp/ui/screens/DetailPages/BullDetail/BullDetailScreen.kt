@@ -1,5 +1,4 @@
-//Created by Nick Heislen 10/14/2025
-package com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail
+package com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,20 +22,22 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.R
+import com.example.cattletrackingapp.ui.components.CalfListSection
 import com.example.cattletrackingapp.ui.components.DetailHeader
 import com.example.cattletrackingapp.ui.components.DetailTabRow
 import com.example.cattletrackingapp.ui.components.InfoRow
+import com.example.cattletrackingapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalfDetailScreen(
+fun BullDetailScreen(
     navController: NavController,
-    calfId: String
+    bullId: String
 ) {
-    val vm: CalfDetailViewModel = hiltViewModel()
+    val vm: BullDetailViewModel = hiltViewModel()
 
-    LaunchedEffect(calfId) {
-        vm.loadCalfDetails(calfId)
+    LaunchedEffect(bullId) {
+        vm.loadBullDetails(bullId)
     }
     val state by vm.uiState.collectAsState()
 
@@ -63,7 +64,7 @@ fun CalfDetailScreen(
             }
         }
 
-        state.calf != null -> {
+        state.bull != null -> {
             // Show the cow details content
             Column(
                 modifier = Modifier
@@ -71,14 +72,14 @@ fun CalfDetailScreen(
             ) {
                 DetailHeader(
                     iconPainter = painterResource(R.drawable.cow_detail_icon),
-                    tagNumber = "Tag # ${state.calf!!.tagNumber}",
-                    type = "Calf"
+                    tagNumber = "Tag # ${state.bull!!.tagNumber}",
+                    type = "Bull"
                 )
 
                 var selectedTab by remember { mutableStateOf(0) }
 
                 DetailTabRow(
-                    tabs = listOf("Details", "Vaccines", "Weights"),
+                    tabs = listOf("Details", "Vaccines", "Calves"),
                     selectedTabIndex = selectedTab,
                     onTabSelected = { selectedTab = it }
                 )
@@ -88,9 +89,11 @@ fun CalfDetailScreen(
                         .padding(16.dp)
                 ) {
                     when (selectedTab) {
-                        0 -> CalfDetailsSection(state.calf!!)
+                        0 -> BullDetailsSection(state.bull!!)
                         1 -> Text("Vaccines")//VaccinesListSection(state.cowVaccineList)
-                        2 -> Text("Weights")//WeightListSection(state.calfWeightList)
+                        2 -> CalfListSection(state.calfList, onClick = { calf ->
+                            navController.navigate(Screen.CalfDetail.routeWithId(calf.id))
+                        })
                     }
                 }
             }
@@ -111,27 +114,18 @@ fun CalfDetailScreen(
 }
 
 @Composable
-fun CalfDetailsSection(calf: CalfUi) {
+fun BullDetailsSection(bull: BullUi) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(vertical = 12.dp)
     ) {
         item {
-            InfoRow(label = "Tag Number:", value = calf.tagNumber)
-            InfoRow(label = "Date of Birth:", value = calf.birthDate ?: "N/A")
-            InfoRow(label = "Sex:", value = calf.sex ?: "N/A")
-            InfoRow(label = "Sire Number:", value = calf.sireNumber ?: "N/A")
-            InfoRow(label = "Dam Number:", value = calf.damNumber ?: "N/A")
-            InfoRow(label = "Current Weight:", value = calf.currentWeight?.toString() ?: "N/A")
-            InfoRow(label = "Average Gain:", value = calf.avgGain?.toString() ?: "N/A")
-            InfoRow(label = "Remarks:", value = calf.remarks ?: "")
+            InfoRow(label = "Tag Number:", value = bull.tagNumber)
+            InfoRow(label = "Bull Name:", value = bull.bullName ?: "N/A")
+            InfoRow(label = "Date In:", value = bull.dateIn ?: "N/A")
+            InfoRow(label = "Date Out:", value = bull.dateOut ?: "N/A")
+            InfoRow(label = "Remarks:", value = bull.remarks ?: "")
         }
     }
 }
-
-
-
-
-
-
