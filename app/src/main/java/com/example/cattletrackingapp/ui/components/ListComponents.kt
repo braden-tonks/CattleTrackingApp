@@ -34,6 +34,7 @@ enum class CattleType(
     BULL("Bulls", "Bull", Screen.AddBull.route)
 }
 
+
 @Composable
 fun CattleTypeTabs (
     selectedType: CattleType,
@@ -63,6 +64,48 @@ fun CattleTypeTabs (
         }
     }
 }
+
+
+// For the Dashboard and List pages on the Weights Module ~ Braden
+enum class DashboardList(
+    val displayName: String,
+    val singularName: String,
+    val addRoute: String) {
+    DASHBOARD("DashBoard", "", Screen.DashBoard.route),
+    LIST("List", "", Screen.WeightList.route)
+}
+
+
+@Composable
+fun WeightModuleTabs (
+    selectedType: DashboardList,
+    onTypeSelected: (DashboardList) -> Unit
+) {
+    TabRow(
+        selectedTabIndex = selectedType.ordinal,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        DashboardList.values().forEachIndexed { index, type ->
+            Tab(
+                selected = selectedType.ordinal == index,
+                onClick = { onTypeSelected(type) },
+                text = { Text(
+                    type.displayName,
+                    style = if (selectedType.ordinal == index)
+                        MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                    else
+                        MaterialTheme.typography.labelLarge
+                ) }
+
+            )
+        }
+    }
+}
+
 
 //end of Tab row for list pages (Created by Nick Heislen
 

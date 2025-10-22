@@ -33,7 +33,12 @@ fun CowDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Cow Details") },
+                title = { Text("Cow Details", style=MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background, // ← Same background
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground
+                ),
                 navigationIcon = {
                     IconButton(
                         onClick = {

@@ -2,7 +2,6 @@ package com.example.cattletrackingapp.ui.components
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -23,13 +22,12 @@ fun DatePickerField(
     onDateSelected: (String) -> Unit
 ) {
     val context = LocalContext.current
-
     var error by remember { mutableStateOf<String?>(null) }
 
-    // Get today’s date as default
+    // Default to today's date
     val calendar = Calendar.getInstance()
 
-    // Try to parse selectedDate ("MM/dd/yyyy") into a Calendar
+    // Parse selected date ("MM/dd/yyyy")
     if (selectedDate.isNotBlank() && error == null) {
         try {
             val parts = selectedDate.split("/")
@@ -39,7 +37,7 @@ fun DatePickerField(
                 val year = parts[2].toInt()
                 calendar.set(year, month, day)
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Ignore parse errors, fallback to today
         }
     }
@@ -66,15 +64,28 @@ fun DatePickerField(
             value = selectedDate,
             onValueChange = {
                 onDateSelected(it)
-                error = validateDate(it) // validate as user types
+                error = validateDate(it)
             },
-            label = { Text(label) },
+            label = { Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             isError = error != null,
             trailingIcon = {
                 IconButton(onClick = { datePickerDialog.show() }) {
-                    Icon(Icons.Default.DateRange, contentDescription = "Pick date")
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Pick date",
+                        tint = if (error == null)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.error
+                    )
                 }
-            }
+            },
+            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                errorBorderColor = MaterialTheme.colorScheme.error,
+                cursorColor = MaterialTheme.colorScheme.primary
+            )
         )
 
         if (error != null) {
@@ -88,7 +99,6 @@ fun DatePickerField(
 }
 
 fun validateDate(date: String): String? {
-
     if (date.length != 10) return "Invalid date format"
 
     if (date.substring(2, 3) != "/" || date.substring(5, 6) != "/")
