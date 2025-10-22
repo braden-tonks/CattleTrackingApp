@@ -87,11 +87,11 @@ fun AddBullScreen(navController: NavController) {
         )
 
         // birthDate date picker field
-        DatePickerField(
-            label = "Date In",
-            selectedDate = dateIn,
-            onDateSelected = { dateIn = it }
-        )
+       DatePickerField(
+           label = "Date In",
+           selectedDate = dateIn,
+           onDateSelected = { dateIn = it }
+       )
 
 
         // Remarks field

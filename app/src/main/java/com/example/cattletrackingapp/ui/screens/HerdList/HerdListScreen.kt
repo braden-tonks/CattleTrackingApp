@@ -83,7 +83,7 @@ fun HerdListScreen(navController: NavController) {
                             val route = when (animal.type) {
                                 CattleType.COW -> Screen.CowDetail.routeWithId(animal.id)
                                 CattleType.CALF -> Screen.CalfDetail.routeWithId(animal.id)
-                                //CattleType.BULL -> Screen.BullDetail.routeWithId(animal.id)
+                                CattleType.BULL -> Screen.BullDetail.routeWithId(animal.id)
                                 else -> null
                             }
                             route?.let { navController.navigate(it) }

@@ -1,48 +1,71 @@
 package com.example.cattletrackingapp.ui.screens.cowdetail
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cattletrackingapp.data.model.Calf
+import com.example.cattletrackingapp.data.model.CowVaccine
+import com.example.cattletrackingapp.data.repository.CalvesRepository
+import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
 import com.example.cattletrackingapp.data.repository.CowsRepository
-import com.example.cattletrackingapp.ui.UIModel.CowUi
-import com.example.cattletrackingapp.ui.UIModel.toUi
+import com.example.cattletrackingapp.ui.screens.DetailPages.CowDetail.CowUi
+import com.example.cattletrackingapp.ui.screens.DetailPages.CowDetail.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CowDetailViewModel @Inject constructor(
-    private val repo: CowsRepository
+    private val cowRepo: CowsRepository,
+    private val calfRepo: CalvesRepository,
+    private val cowVaccineRepo: CowVaccinesRepository
 ) : ViewModel() {
 
     data class UiState(
         val loading: Boolean = false,
         val cow: CowUi? = null,
+        val calfList: List<Calf> = emptyList(),
+        val cowVaccineList: List<CowVaccine> = emptyList(),
         val error: String? = null
     )
 
-    var uiState by mutableStateOf(UiState())
-        private set
+    private val _uiState = MutableStateFlow(UiState())
 
-    fun load(id: String) {
-        // guard: don't re-fetch same id if already loaded
-        if (uiState.cow?.id == id && !uiState.loading) return
+    val uiState: StateFlow<UiState> = _uiState
 
-        uiState = UiState(loading = true)
+
+    fun loadCowDetails(id: String) {
         viewModelScope.launch {
-            runCatching { repo.getCowById(id)?.toUi() }
-                .onSuccess { cow ->
-                    uiState = UiState(
+            _uiState.update { it.copy(loading = true) }
+
+            try {
+                val cowDeferred = async { cowRepo.getCowById(id) }
+                val calvesDeferred = async { calfRepo.getCalvesByDamId(id) }
+                val vaccinesDeferred = async { cowVaccineRepo.getCowVaccineByAnimalId(id) }
+
+                val cow = cowDeferred.await()
+                val calves = calvesDeferred.await()
+                val vaccines = vaccinesDeferred.await()
+
+                val cowUi = cow?.toUi()
+
+                _uiState.update {
+                    it.copy(
                         loading = false,
-                        cow = cow,
-                        error = if (cow == null) "Cow not found" else null
+                        cow = cowUi,
+                        calfList = calves,
+                        cowVaccineList = vaccines
                     )
                 }
-                .onFailure { e ->
-                    uiState = UiState(loading = false, error = e.message ?: "Failed to load")
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(loading = false, error = e.message ?: "Something went wrong")
                 }
+            }
+
         }
     }
 }
