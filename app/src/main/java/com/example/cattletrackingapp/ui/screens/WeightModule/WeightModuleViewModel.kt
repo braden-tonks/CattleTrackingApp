@@ -14,7 +14,8 @@ import javax.inject.Inject
 data class CalvesUiState(
     val calves: List<Calf> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val isDescending: Boolean = true
 )
 
 @HiltViewModel
@@ -32,16 +33,37 @@ class WeightModuleViewModel @Inject constructor(
 
             try {
                 val calves = calfRepo.fetchCalves()
-                    .sortedByDescending { it.current_weight ?: 0.0 }
                 println("Fetched ${calves.size} calves")
 
+                val sortedCalves = sortCalves(calves, _uiState.value.isDescending)
+
                 _uiState.update {
-                    it.copy(calves = calves, isLoading = false)
+                    it.copy(calves = sortedCalves, isLoading = false)
                 }
             } catch (e: Exception) {
                 println("Error fetching calves: ${e.message}")
                 _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
+        }
+    }
+
+    fun toggleSortOrder() {
+        val newDescending = !_uiState.value.isDescending
+        val sorted = sortCalves(_uiState.value.calves, newDescending)
+
+        _uiState.update {
+            it.copy(
+                isDescending = newDescending,
+                calves = sorted
+            )
+        }
+    }
+
+    private fun sortCalves(calves: List<Calf>, descending: Boolean): List<Calf> {
+        return if (descending) {
+            calves.sortedByDescending { it.current_weight ?: 0.0 }
+        } else {
+            calves.sortedBy { it.current_weight ?: 0.0 }
         }
     }
 }

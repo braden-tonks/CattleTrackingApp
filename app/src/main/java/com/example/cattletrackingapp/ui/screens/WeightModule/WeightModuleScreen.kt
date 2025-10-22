@@ -28,14 +28,6 @@ fun WeightModuleScreen(navController: NavController) {
 
         Spacer(Modifier.height(12.dp))
 
-//        // Header
-//        ListHeader(
-//            title = selectedType.displayName,
-//            onAddClick = { navController.navigate(selectedType.addRoute) }
-//        )
-
-        Spacer(Modifier.height(12.dp))
-
         // Content below header
         Column(
             modifier = Modifier

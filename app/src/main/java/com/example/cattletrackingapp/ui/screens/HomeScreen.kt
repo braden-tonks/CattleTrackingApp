@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -28,8 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.ui.navigation.Screen
 
 @Composable
@@ -43,7 +47,8 @@ fun HomeScreen(navController: NavController) {
     val menuItems = listOf(
         MenuItem("Add Cattle", Screen.ChooseAddCattle.route, Icons.Default.Add),
         MenuItem("Herd List", Screen.HerdList.route, Icons.AutoMirrored.Filled.List),
-        MenuItem("Calf Weights", Screen.WeightModule.route, Icons.AutoMirrored.Filled.List)
+        MenuItem("Calf Weights", Screen.WeightModule.route, ImageVector.vectorResource(id = R.drawable.dashboardicon))
+
 
     )
 
