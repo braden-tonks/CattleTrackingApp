@@ -1,11 +1,10 @@
-package com.example.cattletrackingapp.ui.screens.AddCow
+package com.example.cattletrackingapp.ui.screens.AddPages.AddCow
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
 import com.example.cattletrackingapp.data.model.Cow
 import com.example.cattletrackingapp.data.repository.CowsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

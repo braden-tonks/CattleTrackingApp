@@ -2,19 +2,16 @@ package com.example.cattletrackingapp.ui.screens.HerdList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cattletrackingapp.data.model.Calf
 import com.example.cattletrackingapp.data.repository.BullsRepository
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowsRepository
 import com.example.cattletrackingapp.ui.components.CattleType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 data class CattleListUiState(
@@ -47,7 +44,14 @@ class HerdListViewModel @Inject constructor(
                 }
                 _uiState.update {
                     it.copy(
-                        animals = result.sortedBy { a -> a.tagNumber.lowercase() },
+                        animals = result.sortedWith(
+                            compareBy<AnimalUi> {
+                                // numeric key (first number found), nulls sort after numbers
+                                it.tagNumber.filter { ch -> ch.isDigit() }
+                                    .takeIf { s -> s.isNotEmpty() }
+                                    ?.toIntOrNull() ?: Int.MAX_VALUE
+                            }.thenBy { it.tagNumber.lowercase(Locale.getDefault()) }
+                        ),
                         isLoading = false,
                         error = null
                     )

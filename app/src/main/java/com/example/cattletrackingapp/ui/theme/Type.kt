@@ -14,7 +14,7 @@ val Typography = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
-    )
+    ),
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -31,4 +31,24 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+
 )
+
+
+val Typography.detailHeaderLarge: TextStyle
+    get() = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 35.sp,
+        lineHeight = 45.sp,
+        letterSpacing = 0.sp
+    )
+
+val Typography.detailHeaderSmall: TextStyle
+    get() = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 25.sp,
+        lineHeight = 35.sp,
+        letterSpacing = 0.sp
+    )

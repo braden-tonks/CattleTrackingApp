@@ -1,6 +1,7 @@
 package com.example.cattletrackingapp.ui.screens.HerdList
 
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,34 +64,40 @@ fun HerdListScreen(navController: NavController) {
 
             Spacer(Modifier.height(12.dp))
 
-            when {
-                uiState.isLoading -> CircularProgressIndicator()
-                uiState.error != null -> Text("Error: ${uiState.error}")
-                uiState.animals.isEmpty() -> Text(
-                    "No cattle found.",
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                when {
+                    uiState.isLoading -> CircularProgressIndicator()
+                    uiState.error != null -> Text("Error: ${uiState.error}")
+                    uiState.animals.isEmpty() -> Text(
+                        "No cattle found.",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
 
-                else -> CattleList(
-                    items = uiState.animals,
-                    onClick = { animal ->
-                        val route = when (animal.type) {
-                            CattleType.COW -> Screen.CowDetail.routeWithId(animal.id)
-                            CattleType.CALF -> Screen.CalfDetail.routeWithId(animal.id)
-                            //CattleType.BULL -> Screen.BullDetail.routeWithId(animal.id)
-                            else -> null
+                    else -> CattleList(
+                        items = uiState.animals,
+                        onClick = { animal ->
+                            val route = when (animal.type) {
+                                CattleType.COW -> Screen.CowDetail.routeWithId(animal.id)
+                                CattleType.CALF -> Screen.CalfDetail.routeWithId(animal.id)
+                                CattleType.BULL -> Screen.BullDetail.routeWithId(animal.id)
+                                else -> null
+                            }
+                            route?.let { navController.navigate(it) }
+                        },
+                        itemContent = { animal, onClick ->
+                            CattleCard(
+                                title = "${animal.tagNumber}",
+                                subtitle = "${animal.type.singularName}${animal.sex?.let { " - $it" } ?: ""}",
+                                iconPainter = painterResource(R.drawable.cow_icon),
+                                onClick = onClick
+                            )
                         }
-                        route?.let { navController.navigate(it) }
-                    },
-                    itemContent = { animal, onClick ->
-                        CattleCard(
-                            title = "${animal.tagNumber}",
-                            subtitle = "${animal.type.singularName}${animal.sex?.let { " - $it" } ?: ""}",
-                            iconPainter = painterResource(R.drawable.cow_icon),
-                            onClick = onClick
-                        )
-                    }
-                )
+                    )
+                }
             }
         }
     }

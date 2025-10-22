@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens.AddCow
+package com.example.cattletrackingapp.ui.screens.AddPages.AddCow
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.data.model.Cow
 import com.example.cattletrackingapp.ui.components.DatePickerField
-import com.example.cattletrackingapp.ui.screens.AddCow.AddCowViewModel
 
 @Composable
 fun AddCowScreen(navController: NavController) {

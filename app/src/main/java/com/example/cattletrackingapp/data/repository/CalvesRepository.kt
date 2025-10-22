@@ -21,4 +21,12 @@ class CalvesRepository @Inject constructor(
     suspend fun getCalfById(id: String): Calf? {
         return api.getCalfById(id)
     }
+
+    suspend fun getCalvesByDamId(id: String): List<Calf> {
+        return api.getCalvesByParentId(id)
+    }
+
+    suspend fun listCalfWeight(): List<Calf> {
+        return api.listCalfWeight()
+    }
 }
