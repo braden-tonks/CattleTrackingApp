@@ -19,6 +19,9 @@ import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
 import com.example.cattletrackingapp.ui.screens.HomeScreen
 import com.example.cattletrackingapp.ui.screens.SearchByNameScreen
 import com.example.cattletrackingapp.ui.screens.SearchByRFIDScreen
+import com.example.cattletrackingapp.ui.screens.WeightModule.DashBoardScreen
+import com.example.cattletrackingapp.ui.screens.WeightModule.WeightListScreen
+import com.example.cattletrackingapp.ui.screens.WeightModule.WeightModuleScreen
 
 @Composable
 fun MainNavHost() {
@@ -63,6 +66,12 @@ fun MainNavHost() {
             }
 
             composable(Screen.HerdList.route) { HerdListScreen(navController) }
+
+            // Created for the WeightModule ~Braden
+            composable(Screen.WeightModule.route) { WeightModuleScreen(navController) }
+            composable(Screen.DashBoard.route) { DashBoardScreen(navController) }
+            composable(Screen.WeightList.route) { WeightListScreen(navController) }
+
 
         }
     }
