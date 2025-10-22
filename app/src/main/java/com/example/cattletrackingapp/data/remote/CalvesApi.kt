@@ -5,6 +5,8 @@ import com.example.cattletrackingapp.data.model.Cow
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import jakarta.inject.Inject
+import io.github.jan.supabase.postgrest.query.Columns
+
 
 class CalvesApi @Inject constructor (private val client: SupabaseClient){
 
@@ -29,5 +31,13 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
             .select()
             .decodeList<Calf>()
             .firstOrNull { it.id == id }
+    }
+
+    suspend fun listCalfWeight(): List<Calf> {
+        val calves = client.from("calf")
+            .select()
+            .decodeList<Calf>()
+
+        return calves.sortedByDescending { it.current_weight ?: 0.0 }
     }
 }
