@@ -11,7 +11,7 @@ import jakarta.inject.Singleton
 @Singleton
 class CowsRepository @Inject constructor(
     private val api: CowsApi
-){
+) {
 
     suspend fun addCow(cow: Cow): Boolean {
         return api.insertCow(cow)
@@ -26,7 +26,9 @@ class CowsRepository @Inject constructor(
 
     }
 
+
     suspend fun fetchCattleIdsAndTags(): List<CowIdAndTag> {
         return api.getCowIdsAndTags()
     }
 }
+

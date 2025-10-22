@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Vaccines
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -42,7 +43,8 @@ fun HomeScreen(navController: NavController) {
 
     val menuItems = listOf(
         MenuItem("Add Cattle", Screen.ChooseAddCattle.route, Icons.Default.Add),
-        MenuItem("Herd List", Screen.HerdList.route, Icons.AutoMirrored.Filled.List)
+        MenuItem("Herd List", Screen.HerdList.route, Icons.AutoMirrored.Filled.List),
+        MenuItem("Vaccination Module", Screen.Vaccinations.route, Icons.Filled.Vaccines) // ✅ syringe
     )
 
     LazyVerticalGrid(
