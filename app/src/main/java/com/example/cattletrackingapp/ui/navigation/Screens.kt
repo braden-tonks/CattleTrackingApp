@@ -32,4 +32,8 @@ sealed class Screen(val route: String) {
 
     object HerdList : Screen("herd_list")
 
+    object WeightModule : Screen("weight_module")
+    object DashBoard : Screen("dashboard")
+    object WeightList : Screen("weight_list")
+
 }
