@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens.AddBull
+package com.example.cattletrackingapp.ui.screens.AddPages.AddBull
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -87,11 +87,11 @@ fun AddBullScreen(navController: NavController) {
         )
 
         // birthDate date picker field
-        DatePickerField(
-            label = "Date In",
-            selectedDate = dateIn,
-            onDateSelected = { dateIn = it }
-        )
+       DatePickerField(
+           label = "Date In",
+           selectedDate = dateIn,
+           onDateSelected = { dateIn = it }
+       )
 
 
         // Remarks field

@@ -1,7 +1,6 @@
 package com.example.cattletrackingapp.data.remote
 
 import com.example.cattletrackingapp.data.model.Calf
-import com.example.cattletrackingapp.data.model.Cow
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import jakarta.inject.Inject
@@ -31,6 +30,20 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
             .select()
             .decodeList<Calf>()
             .firstOrNull { it.id == id }
+    }
+
+    suspend fun getCalvesByParentId(id: String): List<Calf> {
+        return client.from("calves")
+            .select() {
+                filter {
+                    or {
+                        eq("cow_id", id)
+                        eq("bull_id", id)
+                    }
+                }
+            }
+            .decodeList<Calf>()
+
     }
 
     suspend fun listCalfWeight(): List<Calf> {

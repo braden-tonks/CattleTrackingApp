@@ -18,6 +18,12 @@ sealed class Screen(val route: String) {
         fun routeWithId(id: String?) = "calf_detail/$id"
     }
 
+    //Nick Heislen 10/22/2025
+    object BullDetail : Screen("bull_detail/{bullId}") {
+        fun routeWithId(bullId: String?) = "bull_detail/$bullId"
+        const val ARG_ID = "bullId"
+    }
+
     object AddBull : Screen("add_bull")
     object ChooseAddCattle : Screen("choose_add_cattle")
     companion object {
