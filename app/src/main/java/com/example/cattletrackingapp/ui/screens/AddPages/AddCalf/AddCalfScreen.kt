@@ -155,6 +155,7 @@ fun AddCalfScreen(navController: NavController) {
                         sire_number = sireNumber,
                         birth_date = birthDate,
                         sex = sex,
+                        current_weight = 40.0,
                         remarks = remarks.ifBlank { null }
                     )
                     viewModel.saveCalf(calf)

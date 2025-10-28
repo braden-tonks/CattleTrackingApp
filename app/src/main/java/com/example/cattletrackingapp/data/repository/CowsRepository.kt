@@ -30,5 +30,9 @@ class CowsRepository @Inject constructor(
     suspend fun fetchCattleIdsAndTags(): List<CowIdAndTag> {
         return api.getCowIdsAndTags()
     }
+
+    suspend fun searchCowByTag(tagNumber: String): List<Cow> {
+        return api.searchCowByTag(tagNumber)
+    }
 }
 

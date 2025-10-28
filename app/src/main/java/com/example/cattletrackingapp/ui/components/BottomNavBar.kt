@@ -25,7 +25,7 @@ import com.example.cattletrackingapp.ui.navigation.Screen
 @Composable
 fun BottomNavBar(navController: NavController) {
     val items = listOf(
-        Screen.SearchByName,
+        Screen.SearchScreen,
         Screen.Home,
         Screen.SearchByRFID
     )
@@ -40,8 +40,8 @@ fun BottomNavBar(navController: NavController) {
             NavigationBarItem(
                 icon = {
                     when (screen) {
-                        Screen.SearchByName -> Icon(Icons.Default.Search,
-                            contentDescription = "Search by Name",
+                        Screen.SearchScreen -> Icon(Icons.Default.Search,
+                            contentDescription = "Search",
                             modifier = Modifier.size(40.dp))
 
                         Screen.Home -> Icon(Icons.Default.Home,

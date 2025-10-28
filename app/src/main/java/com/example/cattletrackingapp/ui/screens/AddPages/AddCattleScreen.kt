@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens
+package com.example.cattletrackingapp.ui.screens.AddPages
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement

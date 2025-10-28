@@ -15,7 +15,7 @@ class BullsApi @Inject constructor (private val client: SupabaseClient){
             .decodeList()
     }
 
-    suspend fun getCowById(id: String): Bull? {
+    suspend fun getBullById(id: String): Bull? {
         return client.from("bulls")
             .select()
             .decodeList<Bull>()
@@ -36,5 +36,17 @@ class BullsApi @Inject constructor (private val client: SupabaseClient){
             e.printStackTrace()
             false
         }
+    }
+
+    //This is for the search bar component
+    suspend fun searchBullByTag(tagNumber: String): List<Bull> {
+        return client.from("bulls")
+            .select() {
+                filter {
+                    ilike("tag_number", "%$tagNumber%")
+                }
+            }
+            .decodeList<Bull>()
+
     }
 }
