@@ -10,15 +10,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cattletrackingapp.ui.components.BottomNavBar
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCalf.AddCalfScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddBull.AddBullScreen
-import com.example.cattletrackingapp.ui.screens.AddCattleScreen
+import com.example.cattletrackingapp.ui.screens.AddPages.AddCattleScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCow.AddCowScreen
 import com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail.BullDetailScreen
 import com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail.CalfDetailScreen
 import com.example.cattletrackingapp.ui.screens.HerdList.HerdListScreen
 import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
 import com.example.cattletrackingapp.ui.screens.HomeScreen
-import com.example.cattletrackingapp.ui.screens.SearchByNameScreen
 import com.example.cattletrackingapp.ui.screens.SearchByRFIDScreen
+import com.example.cattletrackingapp.ui.screens.SearchPage.SearchScreen
 import com.example.cattletrackingapp.ui.screens.vaccinations.VaccinationsScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.DashBoardScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightListScreen
@@ -37,7 +37,7 @@ fun MainNavHost() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) { HomeScreen(navController) }
-            composable(Screen.SearchByName.route) { SearchByNameScreen(navController) }
+            composable(Screen.SearchScreen.route) { SearchScreen(navController) }
             composable(Screen.SearchByRFID.route) { SearchByRFIDScreen(navController) }
             composable(Screen.AddCattle.route) { AddCowScreen(navController) }
             composable (Screen.Vaccinations.route) { VaccinationsScreen(navController) }

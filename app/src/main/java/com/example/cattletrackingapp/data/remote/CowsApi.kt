@@ -2,6 +2,7 @@ package com.example.cattletrackingapp.data.remote
 
 //this page is the data access layer that fetches raw 'cow' data from Supabase
 
+import com.example.cattletrackingapp.data.model.Calf
 import com.example.cattletrackingapp.data.model.Cow
 import com.example.cattletrackingapp.data.model.CowIdAndTag
 import io.github.jan.supabase.SupabaseClient
@@ -39,5 +40,17 @@ class CowsApi @Inject constructor (private val client: SupabaseClient) {
         return client.from("cows")
             .select(Columns.list("id", "tag_number"))
             .decodeList<CowIdAndTag>()
+    }
+
+
+    //This is for the search bar component
+    suspend fun searchCowByTag(tagNumber: String): List<Cow> {
+        return client.from("cows")
+            .select() {
+                filter {
+                    ilike("tag_number", "%$tagNumber%")
+                }
+            }
+            .decodeList<Cow>()
     }
 }

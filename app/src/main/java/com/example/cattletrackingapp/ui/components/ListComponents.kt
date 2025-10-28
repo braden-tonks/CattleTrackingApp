@@ -3,6 +3,7 @@ package com.example.cattletrackingapp.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.cattletrackingapp.ui.navigation.Screen
@@ -27,7 +29,8 @@ import com.example.cattletrackingapp.ui.navigation.Screen
 enum class CattleType(
     val displayName: String,
     val singularName: String,
-    val addRoute: String) {
+    val addRoute: String,
+) {
     ALL("All Cattle", "", Screen.ChooseAddCattle.route),
     COW("Cows", "Cow", Screen.AddCattle.route),
     CALF("Calves", "Calf", Screen.AddCalf.route),
@@ -132,6 +135,7 @@ fun ListHeader(
             Icon(Icons.Default.Add, contentDescription = "Add")
             Spacer(Modifier.width(6.dp))
             Text("Add")
+
         }
     }
 }
@@ -148,7 +152,7 @@ fun <T> CattleList(
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(items) { item ->
