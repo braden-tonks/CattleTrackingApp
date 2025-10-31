@@ -50,7 +50,7 @@ fun HomeScreen(navController: NavController) {
     val menuItems = listOf(
         MenuItem("Add Cattle", Screen.ChooseAddCattle.route, Icons.Default.Add),
         MenuItem("Herd List", Screen.HerdList.route, Icons.AutoMirrored.Filled.List),
-        MenuItem("Vaccination Module", Screen.Vaccinations.route, Icons.Filled.Vaccines)
+        MenuItem("Vaccination Module", Screen.Vaccinations.route, Icons.Filled.Vaccines),
         MenuItem("Calf Weights", Screen.WeightModule.route, ImageVector.vectorResource(id = R.drawable.dashboardicon))
 
 

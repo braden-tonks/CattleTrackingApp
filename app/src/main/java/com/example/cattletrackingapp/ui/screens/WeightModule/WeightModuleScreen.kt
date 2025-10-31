@@ -37,14 +37,8 @@ fun WeightModuleScreen(navController: NavController) {
             when (selectedType) {
 
                 DashboardList.DASHBOARD -> {
-                    // Placeholder for dashboard until implemented
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("Dashboard not built yet")
-                    }
+                    // Dashboard screen
+                    DashBoardScreen(navController = navController)
                 }
 
                 DashboardList.LIST -> {
