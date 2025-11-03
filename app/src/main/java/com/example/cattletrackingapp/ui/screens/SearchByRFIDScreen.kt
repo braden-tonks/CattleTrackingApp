@@ -1,28 +1,36 @@
 package com.example.cattletrackingapp.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.cattletrackingapp.MainActivity
+import com.example.cattletrackingapp.ui.components.NFCReaderComponent
 
 @Composable
-fun SearchByRFIDScreen(
-    navController: NavController,
-    tagData: String
-) {
-    LazyColumn(
+fun SearchByRFIDScreen() {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val activity = LocalContext.current as MainActivity
+    val tagData = activity.nfcTagData
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 32.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        item { Text("Search by RFID Screen", style = MaterialTheme.typography.titleMedium) }
-        item { Spacer(modifier = Modifier.height(8.dp)) }
-        item { Text("NFC Tag Data: $tagData", style = MaterialTheme.typography.bodyMedium) }
+        Text("Tag Data: $tagData")
+        Spacer(modifier = Modifier.height(16.dp))
+        NFCReaderComponent(
+            lifecycleOwner = lifecycleOwner,
+            tagData = tagData,
+            onStartScan = { /* nothing */ },
+            onStopScan = { /* nothing */ }
+        )
     }
 }

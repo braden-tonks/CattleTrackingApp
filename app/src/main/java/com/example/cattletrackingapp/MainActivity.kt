@@ -17,7 +17,6 @@ import com.example.cattletrackingapp.ui.theme.CattleTrackingAppTheme
 
 class MainActivity : ComponentActivity() {
 
-    // Compose-friendly state
     var nfcTagData by mutableStateOf("No tag read yet")
 
     private var nfcAdapter: NfcAdapter? = null
@@ -27,21 +26,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize NFC adapter
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
-        // PendingIntent for foreground dispatch
         pendingIntent = PendingIntent.getActivity(
             this, 0,
             Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
             PendingIntent.FLAG_MUTABLE
         )
 
-        // Intent filters
+        val ndefFilter = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED)
         val tagFilter = IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED)
-        intentFilters = arrayOf(tagFilter)
+        val techFilter = IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
+        intentFilters = arrayOf(ndefFilter, tagFilter, techFilter)
 
-        // Set up Compose
         setContent {
             CattleTrackingAppTheme {
                 enableEdgeToEdge()
@@ -50,7 +47,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // Enable foreground dispatch while app is visible
     override fun onResume() {
         super.onResume()
         nfcAdapter?.enableForegroundDispatch(this, pendingIntent, intentFilters, null)
@@ -61,7 +57,6 @@ class MainActivity : ComponentActivity() {
         nfcAdapter?.disableForegroundDispatch(this)
     }
 
-    // Called when NFC tag is detected
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleNfcIntent(intent, { data ->

@@ -2,40 +2,101 @@ package com.example.cattletrackingapp.ui.components
 
 import android.app.Activity
 import android.content.Intent
-import android.nfc.NfcAdapter
 import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 
+/**
+ * Button that opens a MaterialDialog for NFC scanning.
+ * The actual NFC reading happens through MainActivity.onNewIntent → handleNfcIntent().
+ */
 @Composable
 fun NFCReaderComponent(
     lifecycleOwner: LifecycleOwner,
-    onTagRead: (String) -> Unit
+    tagData: String,
+    onStartScan: () -> Unit,
+    onStopScan: () -> Unit
 ) {
-    // Placeholder state just to keep Compose aware of the lifecycle
-    var blank by remember { mutableStateOf(0) }
+    var showDialog by remember { mutableStateOf(false) }
 
-    val observer = remember(lifecycleOwner) {
-        LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                // Nothing needed here; onNewIntent will trigger
-                blank++
+    // --- Scan Button ---
+    Button(
+        onClick = {
+            showDialog = true
+            onStartScan()
+        }
+    ) {
+        Text("Scan NFC Tag")
+    }
+
+    // --- Dialog Overlay ---
+    if (showDialog) {
+        Dialog(onDismissRequest = {
+            showDialog = false
+            onStopScan()
+        }) {
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                tonalElevation = 6.dp
+            ) {
+                Column(
+                    modifier = androidx.compose.ui.Modifier
+                        .padding(24.dp),
+                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                ) {
+                    Text("Hold your phone near an NFC tag", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = androidx.compose.ui.Modifier.height(16.dp))
+                    CircularProgressIndicator()
+                    Spacer(modifier = androidx.compose.ui.Modifier.height(16.dp))
+                    if (tagData != "No tag scanned yet") {
+                        Text(
+                            text = tagData,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = androidx.compose.ui.Modifier.height(16.dp))
+                        Button(onClick = {
+                            showDialog = false
+                            onStopScan()
+                        }) {
+                            Text("Close")
+                        }
+                    } else {
+                        Button(onClick = {
+                            showDialog = false
+                            onStopScan()
+                        }) {
+                            Text("Cancel")
+                        }
+                    }
+                }
             }
         }
     }
 
-    lifecycleOwner.lifecycle.addObserver(observer)
+    // Keep NFC lifecycle cleanly attached
+    val observer = remember(lifecycleOwner) {
+        LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                onStopScan()
+            }
+        }
+    }
 
-    // Remove observer when Composable leaves composition
-    androidx.compose.runtime.DisposableEffect(Unit) {
+    DisposableEffect(Unit) {
+        lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
@@ -43,7 +104,7 @@ fun NFCReaderComponent(
 }
 
 /**
- * Call this from MainActivity.onNewIntent
+ * NFC tag intent handler — called from MainActivity.onNewIntent()
  */
 fun handleNfcIntent(intent: Intent, onTagRead: (String) -> Unit, activity: Activity) {
     val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)

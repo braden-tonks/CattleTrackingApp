@@ -51,10 +51,7 @@ fun MainNavHost() {
 
             // Fixed NFC screen
             composable(Screen.SearchByRFID.route) {
-                SearchByRFIDScreen(
-                    navController = navController,
-                    tagData = tagData
-                )
+                SearchByRFIDScreen()
             }
 
             composable(Screen.AddCattle.route) { AddCowScreen(navController) }
