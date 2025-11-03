@@ -1,5 +1,6 @@
 package com.example.cattletrackingapp.data.remote
 
+import com.example.cattletrackingapp.data.model.Bull
 import com.example.cattletrackingapp.data.model.Calf
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
@@ -52,5 +53,17 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
             .decodeList<Calf>()
 
         return calves.sortedByDescending { it.current_weight ?: 0.0 }
+    }
+
+    //This is for the search bar component
+    suspend fun searchCalfByTag(tagNumber: String): List<Calf> {
+        return client.from("calves")
+            .select() {
+                filter {
+                    ilike("tag_number", "%$tagNumber%")
+                }
+            }
+            .decodeList<Calf>()
+
     }
 }

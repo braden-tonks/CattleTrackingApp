@@ -16,7 +16,7 @@ class BullsRepository @Inject constructor(
     }
 
     suspend fun fetchBullById(id: String): Bull? {
-        return api.getCowById(id)
+        return api.getBullById(id)
     }
 
     suspend fun addBull(bull: Bull): Boolean {
@@ -27,5 +27,9 @@ class BullsRepository @Inject constructor(
         return api.getBulls()
     }
 
+    suspend fun searchBullByTag(tagNumber: String): List<Bull> {
+        return api.searchBullByTag(tagNumber)
+
+    }
 
 }
