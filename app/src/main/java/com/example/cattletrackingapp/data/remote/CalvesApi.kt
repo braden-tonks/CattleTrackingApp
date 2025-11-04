@@ -1,12 +1,10 @@
 package com.example.cattletrackingapp.data.remote
 
-import com.example.cattletrackingapp.data.model.Bull
 import com.example.cattletrackingapp.data.model.Calf
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
-import jakarta.inject.Inject
-import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
+import jakarta.inject.Inject
 
 
 class CalvesApi @Inject constructor (private val client: SupabaseClient){

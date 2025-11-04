@@ -2,7 +2,6 @@ package com.example.cattletrackingapp.data.remote
 
 //this page is the data access layer that fetches raw 'cow' data from Supabase
 
-import com.example.cattletrackingapp.data.model.Calf
 import com.example.cattletrackingapp.data.model.Cow
 import com.example.cattletrackingapp.data.model.CowIdAndTag
 import io.github.jan.supabase.SupabaseClient

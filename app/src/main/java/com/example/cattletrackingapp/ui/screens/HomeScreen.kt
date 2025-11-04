@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.ui.components.HomePageComponents.DashboardScreen
-import com.example.cattletrackingapp.ui.components.HomePageComponents.DashboardSection
 import com.example.cattletrackingapp.ui.components.HomePageComponents.MenuItem
 import com.example.cattletrackingapp.ui.navigation.Screen
 
