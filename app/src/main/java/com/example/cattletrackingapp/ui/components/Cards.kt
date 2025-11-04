@@ -19,26 +19,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.sp
 
 
 //This card will be used as the detail card for detail pages
 //See example usage on CalfDetailScreen
 @Composable
-fun InfoCards (
+fun InfoCards(
     title: String,
     fields: List<Pair<String, String?>>,
     modifier: Modifier = Modifier
-){
+) {
 
     Column(
         modifier
-            . fillMaxWidth()
+            .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -93,7 +92,8 @@ fun CattleCard(
             .fillMaxWidth()
             .clickable { onClick() },
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.secondary,
+            contentColor = Color.Black
         )
     ) {
         Row(

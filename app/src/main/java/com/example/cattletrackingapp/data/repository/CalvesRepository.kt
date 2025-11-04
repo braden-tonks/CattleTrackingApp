@@ -33,4 +33,8 @@ class CalvesRepository @Inject constructor(
     suspend fun searchCalfByTag(tagNumber: String): List<Calf> {
         return api.searchCalfByTag(tagNumber)
     }
+
+    suspend fun getCalfCount(): Int? {
+        return api.getCalfCount()
+    }
 }
