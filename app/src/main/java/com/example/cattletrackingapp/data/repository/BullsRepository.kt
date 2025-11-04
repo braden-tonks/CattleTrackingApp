@@ -32,4 +32,10 @@ class BullsRepository @Inject constructor(
 
     }
 
+    suspend fun getBullCount(): Int? {
+        return api.getBullCount()
+    }
+
+
+
 }

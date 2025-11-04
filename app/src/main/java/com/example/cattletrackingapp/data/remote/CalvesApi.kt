@@ -6,6 +6,7 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import jakarta.inject.Inject
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Count
 
 
 class CalvesApi @Inject constructor (private val client: SupabaseClient){
@@ -65,5 +66,13 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
             }
             .decodeList<Calf>()
 
+    }
+
+    suspend fun getCalfCount(): Int? {
+        return client.from("calves")
+            .select {
+                count(Count.EXACT)
+            }
+            .countOrNull()?.toInt() ?: 0
     }
 }

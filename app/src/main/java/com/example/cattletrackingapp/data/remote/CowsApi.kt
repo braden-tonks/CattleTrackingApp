@@ -8,6 +8,7 @@ import com.example.cattletrackingapp.data.model.CowIdAndTag
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Count
 import jakarta.inject.Inject
 
 
@@ -52,5 +53,13 @@ class CowsApi @Inject constructor (private val client: SupabaseClient) {
                 }
             }
             .decodeList<Cow>()
+    }
+
+    suspend fun getCowCount(): Int? {
+        return client.from("cows")
+            .select {
+                count(Count.EXACT)
+            }
+            .countOrNull()?.toInt() ?: 0
     }
 }

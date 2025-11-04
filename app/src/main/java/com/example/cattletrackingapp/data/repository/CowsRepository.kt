@@ -34,5 +34,9 @@ class CowsRepository @Inject constructor(
     suspend fun searchCowByTag(tagNumber: String): List<Cow> {
         return api.searchCowByTag(tagNumber)
     }
+
+    suspend fun getCowCount(): Int? {
+        return api.getCowCount()
+    }
 }
 
