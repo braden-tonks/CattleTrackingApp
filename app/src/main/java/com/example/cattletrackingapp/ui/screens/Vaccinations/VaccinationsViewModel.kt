@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cattletrackingapp.data.remote.Models.Vaccine
 import com.example.cattletrackingapp.data.repository.VaccinesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -76,7 +77,7 @@ class VaccinationsViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 val ok = repo.addVaccine(
-                    com.example.cattletrackingapp.data.model.Vaccine(
+                    Vaccine(
                         name = name,
                         description = description,
                         notes = notes

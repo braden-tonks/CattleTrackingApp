@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.data.model
+package com.example.cattletrackingapp.data.remote.Models
 
 import kotlinx.serialization.Serializable
 
@@ -9,7 +9,7 @@ data class Weight (
     val calf_id: String? = null,
     val bull_id: String? = null,
     val weight: Double,
-    val data_weighed: String,
+    val date_weighed: String,
     val created_at: String? = null
 
 )
