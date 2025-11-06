@@ -16,10 +16,10 @@ data class CalfUi(
 )
 
 fun Calf.toUi(): CalfUi = CalfUi(
-    id = id ?: "",                        // null → ""
+    id = id ?: "",
     tagNumber = tag_number,
-    damNumber = dam_number ?: "Unknown",  // null → "Unknown"
-    sireNumber = sire_number ?: "Unknown",
+    damNumber = dam_number,
+    sireNumber = sire_number,
     birthDate = birth_date,
     currentWeight = current_weight ?: 0.0,
     avgGain = avg_gain ?: 0.0,

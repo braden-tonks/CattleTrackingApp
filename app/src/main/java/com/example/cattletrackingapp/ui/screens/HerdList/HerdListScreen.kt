@@ -114,7 +114,7 @@ fun HerdListScreen(navController: NavController) {
                         },
                         itemContent = { animal, onClick ->
                             CattleCard(
-                                title = "${animal.tagNumber}",
+                                title = animal.tagNumber,
                                 subtitle = "${animal.type.singularName}${animal.sex?.let { " - $it" } ?: ""}",
                                 iconPainter = painterResource(R.drawable.cow_icon),
                                 onClick = onClick

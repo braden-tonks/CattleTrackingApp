@@ -5,7 +5,6 @@ package com.example.cattletrackingapp.data.remote.Api
 import com.example.cattletrackingapp.data.remote.Models.Cow
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
 import jakarta.inject.Inject
 

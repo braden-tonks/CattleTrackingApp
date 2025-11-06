@@ -7,7 +7,6 @@ import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

@@ -142,7 +142,7 @@ fun CalfListSection(calves: List<Calf>, onClick: (Calf) -> Unit) {
     ) { calf, onClickItem ->
         CattleCard(
             title = "Tag: ${calf.tag_number}",
-            subtitle = "DOB: ${calf.birth_date ?: "Unknown"}",
+            subtitle = "DOB: ${calf.birth_date}",
             iconPainter = painterResource(R.drawable.cow_icon),
             onClick = onClickItem
         )

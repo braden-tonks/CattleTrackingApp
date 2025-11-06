@@ -2,17 +2,14 @@ package com.example.cattletrackingapp.data.repository
 
 import com.example.cattletrackingapp.data.local.dao.CalfDao
 import com.example.cattletrackingapp.data.local.entity.CalfEntity
-import com.example.cattletrackingapp.data.local.entity.CowEntity
 import com.example.cattletrackingapp.data.mapper.toDto
 import com.example.cattletrackingapp.data.mapper.toEntity
-import com.example.cattletrackingapp.data.remote.Models.Calf
 import com.example.cattletrackingapp.data.remote.Api.CalvesApi
-import com.example.cattletrackingapp.data.remote.Models.Cow
+import com.example.cattletrackingapp.data.remote.Models.Calf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.map
 
 @Singleton
 class CalvesRepository @Inject constructor(
