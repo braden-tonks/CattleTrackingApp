@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cattletrackingapp.data.model.BullIdAndTag
-import com.example.cattletrackingapp.data.model.Calf
-import com.example.cattletrackingapp.data.model.CowIdAndTag
+import com.example.cattletrackingapp.data.remote.Models.Bull
+import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.Cow
 import com.example.cattletrackingapp.data.repository.BullsRepository
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowsRepository
@@ -31,29 +31,31 @@ class AddCalfViewModel @Inject constructor(
     var saveState by mutableStateOf(AddCalfUiState())
         private set
 
-    var cowTags by mutableStateOf<List<CowIdAndTag>>(emptyList())
+    var cows by mutableStateOf<List<Cow>>(emptyList())
         private set
 
-    var bullTags by mutableStateOf<List<BullIdAndTag>>(emptyList())
+    var bulls by mutableStateOf<List<Bull>>(emptyList())
         private set
 
 
     init {
-        loadCowTags()
-        loadBullTags()
+        loadCows()
+        loadBulls()
     }
 
-    private fun loadCowTags() {
+    private fun loadCows() {
         viewModelScope.launch {
-            cowTags = runCatching { cowRepo.fetchCattleIdsAndTags() }
-                .getOrElse { emptyList() }
+            cowRepo.allCows.collect { cowList ->
+                cows = cowList
+            }
         }
     }
 
-    private fun loadBullTags() {
+    private fun loadBulls() {
         viewModelScope.launch {
-            bullTags = runCatching { bullRepo.fetchBullIdsAndTags() }
-                .getOrElse { emptyList() }
+            bullRepo.allBulls.collect { bullList ->
+                bulls = bullList
+            }
         }
     }
 

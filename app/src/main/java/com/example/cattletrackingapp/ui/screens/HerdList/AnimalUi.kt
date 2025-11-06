@@ -1,8 +1,11 @@
 package com.example.cattletrackingapp.ui.screens.HerdList
 
-import com.example.cattletrackingapp.data.model.Bull
-import com.example.cattletrackingapp.data.model.Calf
-import com.example.cattletrackingapp.data.model.Cow
+import com.example.cattletrackingapp.data.local.entity.BullEntity
+import com.example.cattletrackingapp.data.local.entity.CalfEntity
+import com.example.cattletrackingapp.data.local.entity.CowEntity
+import com.example.cattletrackingapp.data.remote.Models.Bull
+import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.Cow
 import com.example.cattletrackingapp.ui.components.CattleType
 
 data class AnimalUi(

@@ -44,7 +44,7 @@ fun HerdListScreen(navController: NavController) {
     var query by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(selectedType) {
-        viewModel.loadAnimals(selectedType)
+        viewModel.filterByType(selectedType)
     }
 
     //list all the animals by default but filter them if the user searches a value
@@ -100,6 +100,7 @@ fun HerdListScreen(navController: NavController) {
                         else "No cattle found.",
                         modifier = Modifier.align(Alignment.Center)
                     )
+
                     else -> CattleList(
                         items = filteredAnimals,
                         onClick = { animal ->

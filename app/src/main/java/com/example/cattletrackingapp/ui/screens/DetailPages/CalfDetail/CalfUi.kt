@@ -1,6 +1,6 @@
 package com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail
 
-import com.example.cattletrackingapp.data.model.Calf
+import com.example.cattletrackingapp.data.remote.Models.Calf
 
 data class CalfUi(
     val id: String,

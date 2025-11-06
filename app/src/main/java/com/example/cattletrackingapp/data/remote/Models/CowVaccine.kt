@@ -1,10 +1,10 @@
-package com.example.cattletrackingapp.data.model
+package com.example.cattletrackingapp.data.remote.Models
 
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CowVaccine (
-    val id: String,
+    val id: String? = null,
     val cow_id: String,
     val calf_id: String,
     val bull_id: String,

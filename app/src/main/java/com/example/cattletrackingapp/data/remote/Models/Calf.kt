@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.data.model
+package com.example.cattletrackingapp.data.remote.Models
 
 import kotlinx.serialization.Serializable
 
