@@ -8,11 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation.NavController
 import com.example.cattletrackingapp.MainActivity
 import com.example.cattletrackingapp.ui.components.NFCReaderComponent
 
 @Composable
-fun SearchByRFIDScreen() {
+fun SearchByRFIDScreen(navController: NavController) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val activity = LocalContext.current as MainActivity
     val tagData = activity.nfcTagData
@@ -27,6 +28,7 @@ fun SearchByRFIDScreen() {
         Text("Tag Data: $tagData")
         Spacer(modifier = Modifier.height(16.dp))
         NFCReaderComponent(
+            navController = navController,
             lifecycleOwner = lifecycleOwner,
             tagData = tagData,
             onStartScan = { /* nothing */ },

@@ -205,3 +205,76 @@ fun CalfWeightCard(
         }
     }
 }
+
+@Composable
+fun NFCcard(
+    title: String,
+    sex: String,
+    type: String,
+    iconPainter: Painter? = null,
+    onClick: () -> Unit
+) {
+    ElevatedCard(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // Optional icon
+            if (iconPainter != null) {
+                Icon(
+                    painter = iconPainter,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(end = 16.dp)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = sex,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Light),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = type,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Light),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
+        }
+    }
+}

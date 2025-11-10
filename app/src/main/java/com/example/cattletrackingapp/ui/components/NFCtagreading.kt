@@ -3,33 +3,47 @@ package com.example.cattletrackingapp.ui.components
 import android.app.Activity
 import android.content.Intent
 import android.nfc.NdefMessage
+import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavController
+import com.example.cattletrackingapp.R
+import com.example.cattletrackingapp.ui.navigation.Screen
 
-/**
- * Button that opens a MaterialDialog for NFC scanning.
- * The actual NFC reading happens through MainActivity.onNewIntent → handleNfcIntent().
- */
 @Composable
 fun NFCReaderComponent(
+    navController: NavController,
     lifecycleOwner: LifecycleOwner,
     tagData: String,
     onStartScan: () -> Unit,
     onStopScan: () -> Unit
 ) {
+    val viewModel: NFCViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
+
+    // When NFC tag data changes, trigger load
+    LaunchedEffect(tagData) {
+        if (tagData != "No tag scanned yet" && tagData.isNotBlank()) {
+            viewModel.loadCalves(tagData)
+        } else {
+            viewModel.clearState()
+        }
+    }
 
     // --- Scan Button ---
     Button(
@@ -52,41 +66,54 @@ fun NFCReaderComponent(
                 tonalElevation = 6.dp
             ) {
                 Column(
-                    modifier = androidx.compose.ui.Modifier
-                        .padding(24.dp),
+                    modifier = Modifier.padding(24.dp),
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
                     Text("Hold your phone near an NFC tag", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = androidx.compose.ui.Modifier.height(16.dp))
-                    CircularProgressIndicator()
-                    Spacer(modifier = androidx.compose.ui.Modifier.height(16.dp))
-                    if (tagData != "No tag scanned yet") {
-                        Text(
-                            text = tagData,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(modifier = androidx.compose.ui.Modifier.height(16.dp))
-                        Button(onClick = {
-                            showDialog = false
-                            onStopScan()
-                        }) {
-                            Text("Close")
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    if (uiState.isLoading) {
+                        CircularProgressIndicator()
+                    }
+
+                    if (uiState.error != null) {
+                        Text("Error: ${uiState.error}", color = MaterialTheme.colorScheme.error)
+                    }
+
+                    if (uiState.calves.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                //.fillMaxSize()
+                                .padding(horizontal = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(uiState.calves) { calf ->
+                                NFCcard(
+                                    title = "#${calf.tag_number}",
+                                    sex = calf.sex,
+                                    type = "calf",
+                                    iconPainter = painterResource(R.drawable.cow_icon),
+                                    onClick = {
+                                        navController.navigate(Screen.CalfDetail.routeWithId(calf.id))
+                                    }
+                                )
+                            }
                         }
-                    } else {
-                        Button(onClick = {
-                            showDialog = false
-                            onStopScan()
-                        }) {
-                            Text("Cancel")
-                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = {
+                        showDialog = false
+                        onStopScan()
+                    }) {
+                        Text("Close")
                     }
                 }
             }
         }
     }
 
-    // Keep NFC lifecycle cleanly attached
+    // --- Lifecycle cleanup ---
     val observer = remember(lifecycleOwner) {
         LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_PAUSE) {
@@ -107,25 +134,29 @@ fun NFCReaderComponent(
  * NFC tag intent handler — called from MainActivity.onNewIntent()
  */
 fun handleNfcIntent(intent: Intent, onTagRead: (String) -> Unit, activity: Activity) {
-    val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-    tag?.let {
-        val tagId = it.id.joinToString(":") { byte -> "%02X".format(byte) }
+    val rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+    var tagData = ""
 
-        var textData = ""
-        val rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
-        if (rawMsgs != null) {
-            val msgs = rawMsgs.map { it as NdefMessage }
-            for (msg in msgs) {
-                for (record in msg.records) {
-                    val payload = record.payload
-                    val text = payload.drop(1).toByteArray().decodeToString()
-                    textData += text
+    if (rawMsgs != null) {
+        val msgs = rawMsgs.map { it as NdefMessage }
+        for (msg in msgs) {
+            for (record in msg.records) {
+                // Look for MIME media record with "text/plain"
+                if (record.tnf == NdefRecord.TNF_MIME_MEDIA &&
+                    record.type.contentEquals("text/plain".toByteArray())
+                ) {
+                    try {
+                        // Properly decode the byte array payload
+                        tagData = String(record.payload, Charsets.UTF_8).trim()
+                    } catch (e: Exception) {
+                        Toast.makeText(activity, "Error decoding NFC payload: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
-
-        val fullData = if (textData.isNotEmpty()) "ID: $tagId\nData: $textData" else "ID: $tagId"
-        onTagRead(fullData)
-        Toast.makeText(activity, "NFC Tag Read!", Toast.LENGTH_SHORT).show()
     }
+
+    val finalTagData = if (tagData.isNotEmpty()) tagData else "No data found on tag"
+    onTagRead(finalTagData)
+    Toast.makeText(activity, "NFC Tag Read: $finalTagData", Toast.LENGTH_SHORT).show()
 }

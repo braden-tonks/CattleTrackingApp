@@ -14,7 +14,9 @@ import androidx.compose.runtime.setValue
 import com.example.cattletrackingapp.ui.components.handleNfcIntent
 import com.example.cattletrackingapp.ui.navigation.MainNavHost
 import com.example.cattletrackingapp.ui.theme.CattleTrackingAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     var nfcTagData by mutableStateOf("No tag read yet")

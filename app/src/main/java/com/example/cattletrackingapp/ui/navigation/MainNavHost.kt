@@ -39,7 +39,7 @@ fun MainNavHost() {
 
         // Access MainActivity to get the NFC tag data
         val activity = navController.context as? MainActivity
-        val tagData = activity?.nfcTagData ?: "No tag read yet"
+        //val tagData = activity?.nfcTagData ?: "No tag read yet"
 
         NavHost(
             navController = navController,
@@ -51,7 +51,7 @@ fun MainNavHost() {
 
             // Fixed NFC screen
             composable(Screen.SearchByRFID.route) {
-                SearchByRFIDScreen()
+                SearchByRFIDScreen(navController)
             }
 
             composable(Screen.AddCattle.route) { AddCowScreen(navController) }
