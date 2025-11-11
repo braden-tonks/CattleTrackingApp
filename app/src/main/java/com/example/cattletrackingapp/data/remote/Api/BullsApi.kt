@@ -1,10 +1,9 @@
-package com.example.cattletrackingapp.data.remote
+package com.example.cattletrackingapp.data.remote.Api
 
-import com.example.cattletrackingapp.data.model.Bull
-import com.example.cattletrackingapp.data.model.BullIdAndTag
+import com.example.cattletrackingapp.data.remote.Models.Bull
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Count
 import jakarta.inject.Inject
 
 class BullsApi @Inject constructor (private val client: SupabaseClient){
@@ -20,12 +19,6 @@ class BullsApi @Inject constructor (private val client: SupabaseClient){
             .select()
             .decodeList<Bull>()
             .firstOrNull { it.id == id }
-    }
-
-    suspend fun getBullIdsAndTags(): List<BullIdAndTag> {
-        return client.from("bulls")
-            .select(Columns.list("id", "tag_number"))
-            .decodeList<BullIdAndTag>()
     }
 
     suspend fun insertBull(bull: Bull): Boolean {
@@ -48,5 +41,13 @@ class BullsApi @Inject constructor (private val client: SupabaseClient){
             }
             .decodeList<Bull>()
 
+    }
+
+    suspend fun getBullCount(): Int? {
+        return client.from("bulls")
+            .select {
+                count(Count.EXACT)
+            }
+            .countOrNull()?.toInt() ?: 0
     }
 }

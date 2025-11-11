@@ -2,7 +2,7 @@ package com.example.cattletrackingapp.ui.screens.WeightModule
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cattletrackingapp.data.model.Calf
+import com.example.cattletrackingapp.data.remote.Models.Calf
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

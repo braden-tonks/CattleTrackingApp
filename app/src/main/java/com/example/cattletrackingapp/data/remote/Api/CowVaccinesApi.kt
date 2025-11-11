@@ -1,6 +1,6 @@
-package com.example.cattletrackingapp.data.remote
+package com.example.cattletrackingapp.data.remote.Api
 
-import com.example.cattletrackingapp.data.model.CowVaccine
+import com.example.cattletrackingapp.data.remote.Models.CowVaccine
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
