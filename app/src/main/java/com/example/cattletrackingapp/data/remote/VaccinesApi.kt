@@ -1,8 +1,8 @@
-package com.example.cattletrackingapp.data.remote.Api
+package com.example.cattletrackingapp.data.remote
 
 // Data access for the `vaccines` table (list of all vaccines)
 
-import com.example.cattletrackingapp.data.remote.Models.Vaccine
+import com.example.cattletrackingapp.data.model.Vaccine
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import jakarta.inject.Inject

@@ -1,6 +1,6 @@
 package com.example.cattletrackingapp.ui.screens.DetailPages.CowDetail
 
-import com.example.cattletrackingapp.data.remote.Models.Cow
+import com.example.cattletrackingapp.data.model.Cow
 import java.util.Calendar
 
 //This page is the translator layer between the Supabase data and Compose UI

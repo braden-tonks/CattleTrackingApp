@@ -2,13 +2,14 @@ package com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cattletrackingapp.data.remote.Models.Calf
-import com.example.cattletrackingapp.data.remote.Models.CowVaccine
+import com.example.cattletrackingapp.data.model.Calf
+import com.example.cattletrackingapp.data.model.CowVaccine
 import com.example.cattletrackingapp.data.repository.BullsRepository
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -39,24 +40,20 @@ class BullDetailViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true) }
 
             try {
-                val bull = bullRepo.getBullById(id)
+                val bullDeferred = async { bullRepo.fetchBullById(id) }
+                val calvesDeferred = async { calfRepo.getCalvesByDamId(id) }
+                val vaccinesDeferred = async { cowVaccineRepo.getCowVaccineByAnimalId(id) }
 
-                // Fetch calves using local or remote source
-                val calves = bull?.let { bullData ->
-                    calfRepo.allCalvesByParentTag(bullData.id)
-                } ?: emptyList()
+                val bull = bullDeferred.await()
+                val calves = calvesDeferred.await()
+                val vaccines = vaccinesDeferred.await()
 
-                // Try to fetch vaccines, ignore errors if offline
-                val vaccines = try {
-                    cowVaccineRepo.getCowVaccineByAnimalId(id)
-                } catch (e: Exception) {
-                    emptyList()
-                }
+                val bullUi = bull?.toUi()
 
                 _uiState.update {
                     it.copy(
                         loading = false,
-                        bull = bull?.toUi(),
+                        bull = bullUi,
                         calfList = calves,
                         cowVaccineList = vaccines
                     )

@@ -1,7 +1,7 @@
 package com.example.cattletrackingapp.data.repository
 
-import com.example.cattletrackingapp.data.remote.Models.CowVaccine
-import com.example.cattletrackingapp.data.remote.Api.CowVaccinesApi
+import com.example.cattletrackingapp.data.model.CowVaccine
+import com.example.cattletrackingapp.data.remote.CowVaccinesApi
 import jakarta.inject.Singleton
 import javax.inject.Inject
 

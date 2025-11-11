@@ -2,11 +2,12 @@ package com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cattletrackingapp.data.remote.Models.CowVaccine
+import com.example.cattletrackingapp.data.model.CowVaccine
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -35,20 +36,18 @@ class CalfDetailViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true) }
 
             try {
-                val calf = calfRepo.getCalfById(id)
+                val calfDeferred = async { calfRepo.getCalfById(id) }
+                val vaccinesDeferred = async { cowVaccineRepo.getCowVaccineByAnimalId(id) }
 
+                val calf = calfDeferred.await()
+                val vaccines = vaccinesDeferred.await()
 
-                // Try to fetch vaccines, ignore errors if offline
-                val vaccines = try {
-                    cowVaccineRepo.getCowVaccineByAnimalId(id)
-                } catch (e: Exception) {
-                    emptyList()
-                }
+                val calfUi = calf?.toUi()
 
                 _uiState.update {
                     it.copy(
                         loading = false,
-                        calf = calf?.toUi(),
+                        calf = calfUi,
                         cowVaccineList = vaccines
                     )
                 }

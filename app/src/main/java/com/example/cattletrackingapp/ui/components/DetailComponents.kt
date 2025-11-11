@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.cattletrackingapp.R
-import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.model.Calf
 import com.example.cattletrackingapp.ui.theme.detailHeaderLarge
 import com.example.cattletrackingapp.ui.theme.detailHeaderSmall
 
@@ -142,7 +142,7 @@ fun CalfListSection(calves: List<Calf>, onClick: (Calf) -> Unit) {
     ) { calf, onClickItem ->
         CattleCard(
             title = "Tag: ${calf.tag_number}",
-            subtitle = "DOB: ${calf.birth_date}",
+            subtitle = "DOB: ${calf.birth_date ?: "Unknown"}",
             iconPainter = painterResource(R.drawable.cow_icon),
             onClick = onClickItem
         )
