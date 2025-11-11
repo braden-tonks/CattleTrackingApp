@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cattletrackingapp.data.remote.Models.Bull
+import com.example.cattletrackingapp.data.model.Bull
 import com.example.cattletrackingapp.ui.components.DatePickerField
 
 @Composable
@@ -49,12 +48,6 @@ fun AddBullScreen(navController: NavController) {
         // More rules: numeric only, length limits, etc.
 
         return valid
-    }
-
-    LaunchedEffect(saveState.success) {
-        if (saveState.success == true) {
-            navController.popBackStack() // goes back to cattle list
-        }
     }
 
 

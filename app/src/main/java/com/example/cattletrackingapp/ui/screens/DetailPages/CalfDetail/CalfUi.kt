@@ -1,6 +1,6 @@
 package com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail
 
-import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.model.Calf
 
 data class CalfUi(
     val id: String,
@@ -16,10 +16,10 @@ data class CalfUi(
 )
 
 fun Calf.toUi(): CalfUi = CalfUi(
-    id = id ?: "",
+    id = id ?: "",                        // null → ""
     tagNumber = tag_number,
-    damNumber = dam_number,
-    sireNumber = sire_number,
+    damNumber = dam_number ?: "Unknown",  // null → "Unknown"
+    sireNumber = sire_number ?: "Unknown",
     birthDate = birth_date,
     currentWeight = current_weight ?: 0.0,
     avgGain = avg_gain ?: 0.0,

@@ -1,6 +1,6 @@
 package com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail
 
-import com.example.cattletrackingapp.data.remote.Models.Bull
+import com.example.cattletrackingapp.data.model.Bull
 
 //This page is the translator layer between the Supabase data and Compose UI
 data class BullUi(

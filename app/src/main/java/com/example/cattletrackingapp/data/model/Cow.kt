@@ -1,5 +1,6 @@
-package com.example.cattletrackingapp.data.remote.Models
+package com.example.cattletrackingapp.data.model
 
+import androidx.annotation.Nullable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,4 +13,10 @@ data class Cow (
     val birth_date: String,
     val remarks: String? = null,
     val created_at: String? = null
+)
+
+@Serializable
+data class CowIdAndTag(
+    val id: String,
+    val tag_number: String
 )

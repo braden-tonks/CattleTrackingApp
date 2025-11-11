@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.data.remote.Models
+package com.example.cattletrackingapp.data.model
 
 import kotlinx.serialization.Serializable
 
@@ -12,4 +12,10 @@ data class Bull (
     val date_out: String? = null,
     val remarks: String? = null,
     val created_at: String? = null
+)
+
+@Serializable
+data class BullIdAndTag(
+    val id: String,
+    val tag_number: String
 )
