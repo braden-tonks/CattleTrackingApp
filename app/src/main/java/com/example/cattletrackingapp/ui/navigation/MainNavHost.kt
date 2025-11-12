@@ -55,22 +55,28 @@ fun MainNavHost() {
             }
 
             composable(Screen.AddCattle.route) { AddCowScreen(navController) }
-            composable(Screen.Vaccinations.route) { VaccinationsScreen(navController) }
-
+            composable (Screen.Vaccinations.route) { VaccinationsScreen(navController) }
+            //Created by Eli Herigon
+            //dynamic screen, meaning it is passing through the specific cow so it knows which cow to get details on
             composable(Screen.CowDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString(Screen.CowDetail.ARG_ID).orEmpty()
                 CowDetailScreen(navController, id)
             }
-
+            //Create by Nick Heislen
+            //Brings you to the add Calf Page
             composable(Screen.AddCalf.route) { AddCalfScreen(navController) }
+
+
             composable(Screen.AddBull.route) { AddBullScreen(navController) }
             composable(Screen.ChooseAddCattle.route) { AddCattleScreen(navController) }
 
+            //Takes you to a calf detail page
             composable(Screen.CalfDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("calfId") ?: ""
                 CalfDetailScreen(calfId = id, navController = navController)
             }
 
+            //Takes you to a bull detail page
             composable(Screen.BullDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString(Screen.BullDetail.ARG_ID).orEmpty()
                 BullDetailScreen(navController, id)
@@ -78,10 +84,12 @@ fun MainNavHost() {
 
             composable(Screen.HerdList.route) { HerdListScreen(navController) }
 
-            // WeightModule screens
+            // Created for the WeightModule ~Braden
             composable(Screen.WeightModule.route) { WeightModuleScreen(navController) }
             composable(Screen.DashBoard.route) { DashBoardScreen(navController) }
             composable(Screen.WeightList.route) { WeightListScreen(navController) }
+
+
         }
     }
 }

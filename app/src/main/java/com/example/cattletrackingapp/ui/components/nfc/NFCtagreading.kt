@@ -1,17 +1,17 @@
-package com.example.cattletrackingapp.ui.components
+package com.example.cattletrackingapp.ui.components.nfc
 
 import android.app.Activity
 import android.content.Intent
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
-import android.nfc.Tag
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +22,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.R
+import com.example.cattletrackingapp.ui.components.CattleType
+import com.example.cattletrackingapp.ui.components.NFCcard
 import com.example.cattletrackingapp.ui.navigation.Screen
 
 @Composable
@@ -29,6 +31,7 @@ fun NFCReaderComponent(
     navController: NavController,
     lifecycleOwner: LifecycleOwner,
     tagData: String,
+    selectedType: CattleType = CattleType.ALL,
     onStartScan: () -> Unit,
     onStopScan: () -> Unit
 ) {
@@ -36,10 +39,10 @@ fun NFCReaderComponent(
     val uiState by viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
-    // When NFC tag data changes, trigger load
-    LaunchedEffect(tagData) {
+    // 🔹 When NFC tag data changes, trigger dynamic load
+    LaunchedEffect(tagData, selectedType) {
         if (tagData != "No tag scanned yet" && tagData.isNotBlank()) {
-            viewModel.loadCalves(tagData)
+            viewModel.loadAnimal(tagData, selectedType)
         } else {
             viewModel.clearState()
         }
@@ -67,9 +70,12 @@ fun NFCReaderComponent(
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Hold your phone near an NFC tag", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "Hold your phone near an NFC tag",
+                        style = MaterialTheme.typography.titleMedium
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
 
                     if (uiState.isLoading) {
@@ -80,33 +86,55 @@ fun NFCReaderComponent(
                         Text("Error: ${uiState.error}", color = MaterialTheme.colorScheme.error)
                     }
 
-                    if (uiState.calves.isNotEmpty()) {
+                    if (uiState.animals.isNotEmpty()) {
                         LazyColumn(
                             modifier = Modifier
-                                //.fillMaxSize()
                                 .padding(horizontal = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(uiState.calves) { calf ->
+                            items(uiState.animals) { animal ->
                                 NFCcard(
-                                    title = "#${calf.tag_number}",
-                                    sex = calf.sex,
-                                    type = "calf",
+                                    title = "#${animal.tagNumber}",
+                                    type = animal.type,
                                     iconPainter = painterResource(R.drawable.cow_icon),
                                     onClick = {
-                                        navController.navigate(Screen.CalfDetail.routeWithId(calf.id))
+                                        val route = when (animal.type) {
+                                            CattleType.COW -> Screen.CowDetail.routeWithId(animal.id)
+                                            CattleType.CALF -> Screen.CalfDetail.routeWithId(animal.id)
+                                            CattleType.BULL -> Screen.BullDetail.routeWithId(animal.id)
+                                            else -> null
+                                        }
+
+                                        route?.let { navController.navigate(it) }
                                     }
                                 )
                             }
+
                         }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = {
-                        showDialog = false
-                        onStopScan()
-                    }) {
-                        Text("Close")
+
+                    // --- Clear and Close buttons ---
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                viewModel.clearState()
+                            }
+                        ) {
+                            Text("Clear")
+                        }
+
+                        Button(
+                            onClick = {
+                                showDialog = false
+                                onStopScan()
+                            }
+                        ) {
+                            Text("Close")
+                        }
                     }
                 }
             }
@@ -141,15 +169,17 @@ fun handleNfcIntent(intent: Intent, onTagRead: (String) -> Unit, activity: Activ
         val msgs = rawMsgs.map { it as NdefMessage }
         for (msg in msgs) {
             for (record in msg.records) {
-                // Look for MIME media record with "text/plain"
                 if (record.tnf == NdefRecord.TNF_MIME_MEDIA &&
                     record.type.contentEquals("text/plain".toByteArray())
                 ) {
                     try {
-                        // Properly decode the byte array payload
                         tagData = String(record.payload, Charsets.UTF_8).trim()
                     } catch (e: Exception) {
-                        Toast.makeText(activity, "Error decoding NFC payload: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            activity,
+                            "Error decoding NFC payload: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }

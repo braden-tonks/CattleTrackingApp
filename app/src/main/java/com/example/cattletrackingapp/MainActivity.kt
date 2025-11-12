@@ -11,7 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.cattletrackingapp.ui.components.handleNfcIntent
+import com.example.cattletrackingapp.ui.components.nfc.handleNfcIntent
 import com.example.cattletrackingapp.ui.navigation.MainNavHost
 import com.example.cattletrackingapp.ui.theme.CattleTrackingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
