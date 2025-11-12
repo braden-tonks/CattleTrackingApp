@@ -3,10 +3,15 @@ package com.example.cattletrackingapp.ui.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.cattletrackingapp.MainActivity
 import com.example.cattletrackingapp.ui.components.BottomNavBar
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCalf.AddCalfScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddBull.AddBullScreen
@@ -31,14 +36,25 @@ fun MainNavHost() {
     Scaffold(
         bottomBar = { BottomNavBar(navController) }
     ) { innerPadding ->
+
+        // Access MainActivity to get the NFC tag data
+        val activity = navController.context as? MainActivity
+        //val tagData = activity?.nfcTagData ?: "No tag read yet"
+
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) { HomeScreen(navController) }
+            composable(Screen.SearchByName.route) { SearchByNameScreen(navController) }
+
+            // Fixed NFC screen
+            composable(Screen.SearchByRFID.route) {
+                SearchByRFIDScreen(navController)
+            }
+
             composable(Screen.SearchScreen.route) { SearchScreen(navController) }
-            composable(Screen.SearchByRFID.route) { SearchByRFIDScreen(navController) }
             composable(Screen.AddCattle.route) { AddCowScreen(navController) }
             composable (Screen.Vaccinations.route) { VaccinationsScreen(navController) }
             //Created by Eli Herigon
