@@ -1,0 +1,42 @@
+package com.example.cattletrackingapp.ui.components.nfc
+
+import com.example.cattletrackingapp.data.remote.Models.Bull
+import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.Cow
+import com.example.cattletrackingapp.ui.components.CattleType
+
+data class AnimalUi(
+    val id: String? = null,
+    val tagNumber: String,
+    val type: CattleType,
+    val sex: String? = null
+)
+
+fun Cow.toAnimalUi(): AnimalUi {
+    return AnimalUi(
+        id = this.id,
+        tagNumber = this.tag_number,
+        type = CattleType.COW,
+        sex = null
+    )
+}
+
+
+fun Bull.toAnimalUi(): AnimalUi {
+    return AnimalUi(
+        id = this.id,
+        tagNumber = this.tag_number,
+        type = CattleType.BULL,
+        sex = null
+    )
+}
+
+
+fun Calf.toAnimalUi(): AnimalUi {
+    return AnimalUi(
+        id = this.id,
+        tagNumber = this.tag_number,
+        type = CattleType.CALF,
+        sex = sex
+    )
+}

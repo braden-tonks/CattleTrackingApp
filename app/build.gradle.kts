@@ -89,4 +89,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.57.2")
     kapt("com.google.dagger:hilt-android-compiler:2.57.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+
+    // These are for the offline mode
+    implementation("androidx.room:room-runtime:2.8.3")
+    kapt("androidx.room:room-compiler:2.8.3")
 }
