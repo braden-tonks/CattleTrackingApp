@@ -47,7 +47,7 @@ fun MainNavHost() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) { HomeScreen(navController) }
-            composable(Screen.SearchByName.route) { SearchByNameScreen(navController) }
+            //composable(Screen.SearchPage.SearchByName.route) { SearchByNameScreen(navController) }
 
             // Fixed NFC screen
             composable(Screen.SearchByRFID.route) {
