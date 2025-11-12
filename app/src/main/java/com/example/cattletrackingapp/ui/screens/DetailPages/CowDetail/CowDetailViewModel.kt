@@ -2,8 +2,8 @@ package com.example.cattletrackingapp.ui.screens.cowdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cattletrackingapp.data.model.Calf
-import com.example.cattletrackingapp.data.model.CowVaccine
+import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.CowVaccine
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
 import com.example.cattletrackingapp.data.repository.CowsRepository
@@ -11,7 +11,6 @@ import com.example.cattletrackingapp.ui.screens.DetailPages.CowDetail.CowUi
 import com.example.cattletrackingapp.ui.screens.DetailPages.CowDetail.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -42,20 +41,24 @@ class CowDetailViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true) }
 
             try {
-                val cowDeferred = async { cowRepo.getCowById(id) }
-                val calvesDeferred = async { calfRepo.getCalvesByDamId(id) }
-                val vaccinesDeferred = async { cowVaccineRepo.getCowVaccineByAnimalId(id) }
+                val cow = cowRepo.getCowById(id)
 
-                val cow = cowDeferred.await()
-                val calves = calvesDeferred.await()
-                val vaccines = vaccinesDeferred.await()
+                // Fetch calves using local or remote source
+                val calves = cow?.let { cowData ->
+                    calfRepo.allCalvesByParentTag(cowData.id)
+                } ?: emptyList()
 
-                val cowUi = cow?.toUi()
+                // Try to fetch vaccines, ignore errors if offline
+                val vaccines = try {
+                    cowVaccineRepo.getCowVaccineByAnimalId(id)
+                } catch (e: Exception) {
+                    emptyList()
+                }
 
                 _uiState.update {
                     it.copy(
                         loading = false,
-                        cow = cowUi,
+                        cow = cow?.toUi(),
                         calfList = calves,
                         cowVaccineList = vaccines
                     )

@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cattletrackingapp.data.model.Calf
+import com.example.cattletrackingapp.data.remote.Models.Calf
 import com.example.cattletrackingapp.ui.components.DatePickerField
 import com.example.cattletrackingapp.ui.components.PicklistField
 import com.example.cattletrackingapp.ui.components.SearchableDropdownField
@@ -31,10 +31,10 @@ fun AddCalfScreen(navController: NavController) {
     // State for form fields
     var tagNumber by remember { mutableStateOf("") }
     var tagNumberError by remember { mutableStateOf<String?>(null) }
-    var cowId by remember { mutableStateOf("") }
+    var cowId: String? by remember { mutableStateOf("") }
     var damNumber by remember { mutableStateOf("") }
     var damNumberError by remember { mutableStateOf<String?>(null) }
-    var bullId by remember { mutableStateOf("") }
+    var bullId: String? by remember { mutableStateOf("") }
     var sireNumber by remember { mutableStateOf("") }
     var sireNumberError by remember { mutableStateOf<String?>(null) }
     var birthDate by remember { mutableStateOf("") }
@@ -106,7 +106,7 @@ fun AddCalfScreen(navController: NavController) {
         // Dam Number
         SearchableDropdownField(
             label = "Dam (Cow Tag)",
-            options = viewModel.cowTags,
+            options = viewModel.cows,
             optionLabel = { it.tag_number },
             selectedLabel = damNumber,
             onOptionSelected = {
@@ -118,7 +118,7 @@ fun AddCalfScreen(navController: NavController) {
         // Sire Number
         SearchableDropdownField(
             label = "Sire (Bull Tag)",
-            options = viewModel.bullTags,
+            options = viewModel.bulls,
             optionLabel = { it.tag_number },
             selectedLabel = sireNumber,
             onOptionSelected = {
@@ -155,6 +155,7 @@ fun AddCalfScreen(navController: NavController) {
                         sire_number = sireNumber,
                         birth_date = birthDate,
                         sex = sex,
+                        current_weight = 40.0,
                         remarks = remarks.ifBlank { null }
                     )
                     viewModel.saveCalf(calf)
