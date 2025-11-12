@@ -30,6 +30,8 @@ class CalvesRepository @Inject constructor(
         return api.listCalfWeight()
     }
 
+    suspend fun getCalves(): List<Calf> = api.getCalves()
+
     suspend fun searchCalfByTag(tagNumber: String): List<Calf> {
         return api.searchCalfByTag(tagNumber)
     }

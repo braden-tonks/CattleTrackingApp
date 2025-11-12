@@ -26,6 +26,7 @@ class BullsRepository @Inject constructor(
     suspend fun fetchBullsList(): List<Bull> {
         return api.getBulls()
     }
+    suspend fun getBulls(): List<Bull> = api.getBulls()
 
     suspend fun searchBullByTag(tagNumber: String): List<Bull> {
         return api.searchBullByTag(tagNumber)

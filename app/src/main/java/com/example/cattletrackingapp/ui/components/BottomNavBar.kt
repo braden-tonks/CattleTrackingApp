@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -12,6 +13,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +25,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.ui.navigation.Screen
 
+// simple controller to toggle the chat overlay from the bottom bar
+object ChatOverlayController {
+    var open by mutableStateOf(false)
+}
 
 @Composable
 fun BottomNavBar(navController: NavController) {
@@ -72,5 +80,26 @@ fun BottomNavBar(navController: NavController) {
                 )
             )
         }
+
+        // Chat button that opens a full-screen chat overlay
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Chat,
+                    contentDescription = "Chat",
+                    modifier = Modifier.size(40.dp)
+                )
+            },
+            label = { Text("Chat", fontSize = 13.sp) },
+            selected = false, // overlay isn't a route
+            onClick = { ChatOverlayController.open = true },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.secondary,
+                unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                selectedTextColor = MaterialTheme.colorScheme.secondary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                indicatorColor = MaterialTheme.colorScheme.onPrimary
+            )
+        )
     }
 }
