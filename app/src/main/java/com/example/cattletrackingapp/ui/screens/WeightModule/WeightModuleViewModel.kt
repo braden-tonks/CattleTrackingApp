@@ -18,6 +18,8 @@ data class CalvesUiState(
     val isDescending: Boolean = true
 )
 
+
+
 @HiltViewModel
 class WeightModuleViewModel @Inject constructor(
     private val calfRepo: CalvesRepository
@@ -28,12 +30,10 @@ class WeightModuleViewModel @Inject constructor(
 
     fun loadCalves() {
         viewModelScope.launch {
-            println("WeightModuleViewModel: loadCalves called")
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             try {
                 val calves = calfRepo.fetchCalves()
-                println("Fetched ${calves.size} calves")
 
                 val sortedCalves = sortCalves(calves, _uiState.value.isDescending)
 
@@ -41,7 +41,6 @@ class WeightModuleViewModel @Inject constructor(
                     it.copy(calves = sortedCalves, isLoading = false)
                 }
             } catch (e: Exception) {
-                println("Error fetching calves: ${e.message}")
                 _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
         }
