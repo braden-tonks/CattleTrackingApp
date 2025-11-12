@@ -29,7 +29,6 @@ import androidx.compose.ui.zIndex
 private enum class Step { List, Select, Assign }
 
 @OptIn(ExperimentalLayoutApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun VaccinationsScreen(
     navController: NavController,
