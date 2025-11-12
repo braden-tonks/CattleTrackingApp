@@ -42,7 +42,7 @@ class NFCViewModel @Inject constructor(
                 val animalUi: AnimalUi? = when (type) {
                     CattleType.COW -> cowRepo.getCowById(tagNumber)?.toAnimalUi()
                     CattleType.CALF -> calfRepo.getCalfById(tagNumber)?.toAnimalUi()
-                    CattleType.BULL -> bullRepo.fetchBullById(tagNumber)?.toAnimalUi()
+                    CattleType.BULL -> bullRepo.getBullById(tagNumber)?.toAnimalUi()
                     CattleType.ALL -> findAnimalAcrossAll(tagNumber)
                 }
 
