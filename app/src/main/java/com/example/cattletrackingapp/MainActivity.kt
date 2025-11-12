@@ -17,10 +17,6 @@ import com.example.cattletrackingapp.ui.theme.CattleTrackingAppTheme
 import com.example.cattletrackingapp.ui.navigation.MainNavHost
 import com.example.cattletrackingapp.ui.theme.CattleTrackingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -51,6 +47,8 @@ class MainActivity : ComponentActivity() {
             syncManager.syncAll()
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContent {
             CattleTrackingAppTheme {
                 enableEdgeToEdge()

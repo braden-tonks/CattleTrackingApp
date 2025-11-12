@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -24,7 +25,7 @@ import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
 import com.example.cattletrackingapp.ui.screens.HomeScreen
 import com.example.cattletrackingapp.ui.screens.SearchByRFIDScreen
 import com.example.cattletrackingapp.ui.screens.SearchPage.SearchScreen
-import com.example.cattletrackingapp.ui.screens.vaccinations.VaccinationsScreen
+import com.example.cattletrackingapp.ui.screens.Vaccinations.VaccinationsScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.DashBoardScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightListScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightModuleScreen
@@ -32,6 +33,9 @@ import com.example.cattletrackingapp.ui.screens.WeightModule.WeightModuleScreen
 @Composable
 fun MainNavHost() {
     val navController = rememberNavController()
+
+    var chatOpen by rememberSaveable { mutableStateOf(false) }
+
 
     Scaffold(
         bottomBar = { BottomNavBar(navController) }
@@ -93,4 +97,11 @@ fun MainNavHost() {
 
         }
     }
+    // show the chat overlay when toggled from the bottom bar
+    if (com.example.cattletrackingapp.ui.components.ChatOverlayController.open) {
+        com.example.cattletrackingapp.ui.screens.chat.ChatOverlay(
+            onClose = { com.example.cattletrackingapp.ui.components.ChatOverlayController.open = false }
+        )
+    }
+
 }
