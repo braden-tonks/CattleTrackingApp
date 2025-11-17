@@ -17,12 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.ui.navigation.Screen
 
 // simple controller to toggle the chat overlay from the bottom bar
@@ -34,8 +32,7 @@ object ChatOverlayController {
 fun BottomNavBar(navController: NavController) {
     val items = listOf(
         Screen.SearchScreen,
-        Screen.Home,
-        Screen.SearchByRFID
+        Screen.Home
     )
 
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination
@@ -56,11 +53,6 @@ fun BottomNavBar(navController: NavController) {
                         Screen.Home -> Icon(
                             imageVector = Icons.Filled.Home,
                             contentDescription = "Home",
-                            modifier = Modifier.size(40.dp)
-                        )
-                        Screen.SearchByRFID -> Icon(
-                            painter = painterResource(id = R.drawable.scan),
-                            contentDescription = "Search by RFID",
                             modifier = Modifier.size(40.dp)
                         )
                         else -> Icon(Icons.Filled.Info, contentDescription = null)
