@@ -3,8 +3,10 @@ package com.example.cattletrackingapp.data.remote.Api
 //this page is the data access layer that fetches raw 'cow' data from Supabase
 
 import com.example.cattletrackingapp.data.remote.Models.Cow
+import com.example.cattletrackingapp.data.remote.Models.CowIdAndTag
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
 import jakarta.inject.Inject
 
@@ -32,6 +34,12 @@ class CowsApi @Inject constructor (private val client: SupabaseClient) {
             .select()
             .decodeList<Cow>()
             .firstOrNull { it.id == id }
+    }
+
+    suspend fun getCowIdsAndTags(): List<CowIdAndTag> {
+        return client.from("cows")
+            .select(Columns.list("id", "tag_number"))
+            .decodeList<CowIdAndTag>()
     }
 
     //This is for the search bar component

@@ -8,6 +8,17 @@ import jakarta.inject.Inject
 
 class CowVaccinesApi @Inject constructor (private val client: SupabaseClient){
 
+    /** Bulk insert rows (animal × vaccine). Returns true on success. */
+    suspend fun insertMany(rows: List<Map<String, String?>>): Boolean {
+        return try {
+            client.from("cow_vaccines").insert(rows)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
     suspend fun getCowVaccines(): List<CowVaccine> {
         return client.from("cow_vaccines")
             .select()

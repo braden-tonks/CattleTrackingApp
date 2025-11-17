@@ -5,7 +5,7 @@ sealed class Screen(val route: String) {
     object SearchScreen : Screen("search_screen")
     object SearchByRFID : Screen("search_by_rfid")
     object AddCattle : Screen("add_cattle")
-    object Vaccinations : Screen("vaccinatons")
+    object Vaccinations : Screen("vaccinations")
 
     object CowDetail : Screen("cow_detail/{cowId}") {
         fun routeWithId(cowId: String?) = "cow_detail/$cowId"
