@@ -27,6 +27,7 @@ import com.example.cattletrackingapp.ui.screens.Vaccinations.VaccinationsScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.DashBoardScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightListScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightModuleScreen
+import com.example.cattletrackingapp.ui.screens.WeightModule.addweight.AddWeightScreen
 import com.example.cattletrackingapp.ui.screens.cowdetail.CowDetailScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -89,6 +90,9 @@ fun MainNavHost() {
             composable(Screen.WeightModule.route) { WeightModuleScreen(navController) }
             composable(Screen.DashBoard.route) { DashBoardScreen(navController) }
             composable(Screen.WeightList.route) { WeightListScreen(navController) }
+            composable(Screen.AddWeight.route) { AddWeightScreen(navController) }
+
+
         }
     }
 
