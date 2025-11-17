@@ -53,7 +53,9 @@ fun NFCReaderComponent(
         onClick = {
             showDialog = true
             onStartScan()
-        }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         Text("Scan NFC Tag")
     }

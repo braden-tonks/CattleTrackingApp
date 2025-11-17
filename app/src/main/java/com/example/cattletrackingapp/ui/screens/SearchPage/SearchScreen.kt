@@ -4,6 +4,7 @@ package com.example.cattletrackingapp.ui.screens.SearchPage
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -17,10 +18,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
+import com.example.cattletrackingapp.MainActivity
 import com.example.cattletrackingapp.ui.components.CattleType
+import com.example.cattletrackingapp.ui.components.nfc.NFCReaderComponent
 import com.example.cattletrackingapp.ui.navigation.Screen
 import com.example.compose.snippets.components.CustomizableSearchBar
 
@@ -32,6 +37,11 @@ fun SearchScreen(
     val vm: SearchBarViewModel = hiltViewModel()
     val uiState by vm.uiState.collectAsState()
     var query by rememberSaveable { mutableStateOf("") }
+
+    // All are needed for the nfc component to work
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val activity = LocalContext.current as MainActivity
+    val tagData = activity.nfcTagData
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -85,6 +95,24 @@ fun SearchScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Component button call
+            NFCReaderComponent(
+                navController = navController,
+                lifecycleOwner = lifecycleOwner,
+                tagData = tagData,
+                onStartScan = { /* nothing */ },
+                onStopScan = { /* nothing */ }
+            )
         }
     }
 }
