@@ -28,6 +28,7 @@ import com.example.cattletrackingapp.ui.screens.vaccinations.VaccinationsScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.DashBoardScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightListScreen
 import com.example.cattletrackingapp.ui.screens.WeightModule.WeightModuleScreen
+import com.example.cattletrackingapp.ui.screens.WeightModule.addweight.AddWeightScreen
 
 @Composable
 fun MainNavHost() {
@@ -89,6 +90,7 @@ fun MainNavHost() {
             composable(Screen.WeightModule.route) { WeightModuleScreen(navController) }
             composable(Screen.DashBoard.route) { DashBoardScreen(navController) }
             composable(Screen.WeightList.route) { WeightListScreen(navController) }
+            composable(Screen.AddWeight.route) { AddWeightScreen(navController) }
 
 
         }

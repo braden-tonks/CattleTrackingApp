@@ -6,6 +6,7 @@ import com.example.cattletrackingapp.data.mapper.toDto
 import com.example.cattletrackingapp.data.mapper.toEntity
 import com.example.cattletrackingapp.data.remote.Api.CalvesApi
 import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.Weight
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -114,4 +115,10 @@ class CalvesRepository @Inject constructor(
         } catch (e: Exception) { /* offline: ignore */
         }
     }
+
+    //Update current weight and avg gain
+    suspend fun reloadCalfweight(current_weight: Weight, id: String, days: Int): Boolean {
+        return api.reloadCurrentWeight(current_weight, id, days)
+    }
+
 }
