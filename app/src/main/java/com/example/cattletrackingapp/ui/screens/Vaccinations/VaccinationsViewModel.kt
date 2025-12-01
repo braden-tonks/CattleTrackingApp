@@ -36,6 +36,55 @@ class VaccinationsViewModel @Inject constructor(
     private val cowVaccinesRepo: CowVaccinesRepository
 ) : ViewModel() {
 
+
+    // --- DELETE MODE state ---
+    var deleteMode by mutableStateOf(false)
+        private set
+    var deleteCandidateId by mutableStateOf<String?>(null)
+        private set
+    var deleting by mutableStateOf(false)
+        private set
+
+    fun toggleDeleteMode() {
+        deleteMode = !deleteMode
+        if (!deleteMode) deleteCandidateId = null
+    }
+    fun clearDeleteCandidate() {
+        deleteCandidateId = null
+    }
+
+
+    /** User tapped a vaccine while in delete mode. */
+    fun chooseDelete(id: String) {
+        deleteCandidateId = id
+    }
+
+    /** Confirm and delete the selected vaccine from the catalog. */
+    fun confirmDeleteSelected(onDone: () -> Unit = {}) {
+        val id = deleteCandidateId ?: return
+        viewModelScope.launch {
+            deleting = true
+            runCatching { repo.deleteVaccine(id) }
+                .onSuccess { ok ->
+                    if (ok) {
+                        // remove from current list
+                        uiState = uiState.copy(
+                            vaccines = uiState.vaccines.filterNot { it.id == id }
+                        )
+                        toastMessage = "Deleted vaccine"
+                        deleteCandidateId = null
+                        deleteMode = false
+                    } else {
+                        toastMessage = "Delete failed"
+                    }
+                }
+                .onFailure { e ->
+                    toastMessage = e.message ?: "Delete error"
+                }
+            deleting = false
+            onDone()
+        }
+    }
     data class UiState(
         val loading: Boolean = false,
         val vaccines: List<VaccineUi> = emptyList(),

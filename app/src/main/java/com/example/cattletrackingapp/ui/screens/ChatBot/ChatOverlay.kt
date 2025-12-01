@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens.chat
+package com.example.cattletrackingapp.ui.screens.ChatBot
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatOverlay(onClose: () -> Unit) {

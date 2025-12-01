@@ -37,5 +37,6 @@ sealed class Screen(val route: String) {
     object WeightModule : Screen("weight_module")
     object DashBoard : Screen("dashboard")
     object WeightList : Screen("weight_list")
+    object AddWeight : Screen("add_weight")
 
 }
