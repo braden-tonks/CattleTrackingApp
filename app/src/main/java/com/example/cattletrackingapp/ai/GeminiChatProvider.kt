@@ -2,6 +2,7 @@ package com.example.cattletrackingapp.ai
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.delay
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -35,42 +36,73 @@ class GeminiChatProvider(
 
     override suspend fun send(messages: List<ChatMessage>): ChatMessage {
         if (apiKey.isBlank()) {
-            return ChatMessage(ChatMessage.Role.Assistant, "Gemini API key is missing. Add GEMINI_API_KEY to local.properties.")
+            return ChatMessage(
+                ChatMessage.Role.Assistant,
+                "Gemini API key is missing. Add GEMINI_API_KEY to local.properties."
+            )
         }
 
         val userText = messages.lastOrNull { it.role == ChatMessage.Role.User }?.text.orEmpty()
         if (userText.isBlank()) return ChatMessage(ChatMessage.Role.Assistant, "Ask me something!")
 
-        val model = modelName.ifBlank { "gemini-2.5-flash" }
-        val url = "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey"
+        // Keep your chosen model, but have a simple fallback ready.
+        val candidates = listOf(
+            modelName.ifBlank { "gemini-2.5-flash" },
+            "gemini-1.5-flash-latest"
+        ).distinct()
 
-        // Nudge the model to stay concise (helps avoid hitting caps) but we also raise the cap.
         val prompt = "$userText\n\nPlease answer concisely."
 
-        val payload = GenerateContentRequest(
-            contents = listOf(ContentDto(role = "user", parts = listOf(PartDto(text = prompt)))),
-            generationConfig = GenerationConfig(
-                maxOutputTokens = 1600,   // raise cap to avoid MAX_TOKENS truncation
-                temperature = 0.7f,
-                topK = 40,
-                topP = 0.95f
-            )
-        )
+        // Try each model with up to 3 attempts (shrinking token cap + backoff).
+        for (m in candidates) {
+            val url = "https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent?key=$apiKey"
 
-        val first = performCall(url, payload)
-        if (first.isTimeout) {
-            val smaller = payload.copy(generationConfig = payload.generationConfig?.copy(maxOutputTokens = 512))
-            val second = performCall(url, smaller)
-            return second.message
+            // attempt 1: full
+            var result = performCall(
+                url, GenerateContentRequest(
+                    contents = listOf(ContentDto(role = "user", parts = listOf(PartDto(text = prompt)))),
+                    generationConfig = GenerationConfig(maxOutputTokens = 1600, temperature = 0.7f, topK = 40, topP = 0.95f)
+                )
+            )
+            if (!result.isRetriable) return result.message
+
+            // attempt 2: smaller
+            backoffDelay(350)
+            result = performCall(
+                url, GenerateContentRequest(
+                    contents = listOf(ContentDto(role = "user", parts = listOf(PartDto(text = prompt)))),
+                    generationConfig = GenerationConfig(maxOutputTokens = 512, temperature = 0.7f, topK = 40, topP = 0.95f)
+                )
+            )
+            if (!result.isRetriable) return result.message
+
+            // attempt 3: tiny
+            backoffDelay(800)
+            result = performCall(
+                url, GenerateContentRequest(
+                    contents = listOf(ContentDto(role = "user", parts = listOf(PartDto(text = prompt)))),
+                    generationConfig = GenerationConfig(maxOutputTokens = 256, temperature = 0.7f, topK = 40, topP = 0.95f)
+                )
+            )
+            if (!result.isRetriable) return result.message
+            // else: try next model
         }
-        return first.message
+
+        // Total failure across models/attempts: graceful message
+        return ChatMessage(
+            ChatMessage.Role.Assistant,
+            "Gemini is overloaded right now (or rate-limited). Try again shortly."
+        )
     }
 
-    private data class CallResult(val message: ChatMessage, val isTimeout: Boolean = false)
+    private data class CallResult(
+        val message: ChatMessage,
+        val isRetriable: Boolean
+    )
 
     private suspend fun performCall(url: String, payload: GenerateContentRequest): CallResult {
         return try {
-            val replyText = withContext(Dispatchers.IO) {
+            val msg = withContext(Dispatchers.IO) {
                 val bodyStr = json.encodeToString(GenerateContentRequest.serializer(), payload)
                 val req = Request.Builder()
                     .url(url)
@@ -79,8 +111,12 @@ class GeminiChatProvider(
 
                 client.newCall(req).execute().use { resp ->
                     val respStr = resp.body?.string().orEmpty()
+
                     if (!resp.isSuccessful) {
-                        return@withContext "Gemini error: HTTP ${resp.code} ${resp.message}\n$respStr"
+                        val code = resp.code
+                        val retriable = (code == 429 || code == 503)
+                        val text = "Gemini error: HTTP $code ${resp.message}\n$respStr"
+                        return@use CallResult(ChatMessage(ChatMessage.Role.Assistant, text), retriable)
                     }
 
                     val parsed = json.decodeFromString(GenerateContentResponse.serializer(), respStr)
@@ -116,19 +152,26 @@ class GeminiChatProvider(
                         }
                     }
 
-                    textOut
+                    CallResult(ChatMessage(ChatMessage.Role.Assistant, textOut), false)
                 }
             }
-
-            CallResult(ChatMessage(ChatMessage.Role.Assistant, replyText))
-        } catch (t: SocketTimeoutException) {
+            msg
+        } catch (_: SocketTimeoutException) {
             CallResult(
-                ChatMessage(ChatMessage.Role.Assistant, "Gemini error: SocketTimeout – retrying with a smaller response…"),
-                isTimeout = true
+                ChatMessage(ChatMessage.Role.Assistant, "Gemini timeout — retrying…"),
+                true
             )
         } catch (t: Throwable) {
-            CallResult(ChatMessage(ChatMessage.Role.Assistant, "Gemini error: ${t::class.java.simpleName}: ${t.message ?: "unknown"}"))
+            // Other errors are generally not retriable; surface message
+            CallResult(
+                ChatMessage(ChatMessage.Role.Assistant, "Gemini error: ${t::class.java.simpleName}: ${t.message ?: "unknown"}"),
+                false
+            )
         }
+    }
+
+    private suspend fun backoffDelay(ms: Long) {
+        delay(ms)
     }
 }
 

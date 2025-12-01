@@ -20,4 +20,7 @@ class VaccinesRepository @Inject constructor(
     suspend fun getVaccineById(id: String): Vaccine? {
         return api.getVaccineById(id)
     }
+
+    suspend fun deleteVaccine(vaccineId: String): Boolean = api.deleteVaccine(vaccineId)
+
 }

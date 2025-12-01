@@ -1,4 +1,4 @@
-package com.example.cattletrackingapp.ui.screens.chat
+package com.example.cattletrackingapp.ui.screens.ChatBot
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode

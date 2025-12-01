@@ -15,9 +15,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.cattletrackingapp.MainActivity
 import com.example.cattletrackingapp.ui.components.BottomNavBar
+import com.example.cattletrackingapp.ui.components.ChatOverlayController
 import com.example.cattletrackingapp.ui.screens.AddPages.AddBull.AddBullScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCalf.AddCalfScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCattleScreen
+import com.example.cattletrackingapp.ui.screens.ChatBot.ChatOverlay
 import com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail.BullDetailScreen
 import com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail.CalfDetailScreen
 import com.example.cattletrackingapp.ui.screens.HerdList.HerdListScreen
@@ -58,7 +60,7 @@ fun MainNavHost() {
             // If you ALSO have a Screen.AddCow route, keep this too:
             // composable(Screen.AddCow.route) { AddCowScreen(navController) }
 
-            composable(Screen.Vaccinations.route) { VaccinationsScreen(navController) }
+            composable(Screen.Vaccinations.route) { VaccinationsScreen() }
 
             // Cow detail
             composable(Screen.CowDetail.route) { backStackEntry ->
@@ -98,8 +100,8 @@ fun MainNavHost() {
 
     // Chat overlay (leave as-is if it exists)
     if (com.example.cattletrackingapp.ui.components.ChatOverlayController.open) {
-        com.example.cattletrackingapp.ui.screens.chat.ChatOverlay(
-            onClose = { com.example.cattletrackingapp.ui.components.ChatOverlayController.open = false }
+        ChatOverlay(
+            onClose = { ChatOverlayController.open = false }
         )
     }
 }
