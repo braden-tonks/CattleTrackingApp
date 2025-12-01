@@ -16,6 +16,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,15 +26,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.cattletrackingapp.MainActivity
 import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.data.remote.Models.Calf
 import com.example.cattletrackingapp.ui.components.CalfWeightCard
+import com.example.cattletrackingapp.ui.components.nfc.WeighInNfcDialog
 import com.example.cattletrackingapp.ui.navigation.Screen
 
 @Composable
 fun AddWeightScreen(navController: NavController) {
     val viewModel: AddWeightViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
+
+    var showNfcDialog by remember { mutableStateOf(false) }
+    val activity = LocalContext.current as MainActivity
+    val tagData = activity.nfcTagData
+
 
     Box(modifier = Modifier.fillMaxSize().padding(12.dp)) {
         if (uiState.isLoading) {
@@ -57,11 +65,25 @@ fun AddWeightScreen(navController: NavController) {
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             item {
+                Spacer(Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(onClick = { showNfcDialog = true }) {
+                        Text("Weigh Using NFC")
+                    }
+                }
+            }
+            item {
                 Text("Calves not weighed today",
                     style = androidx.compose.material3.MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Center, // center the text
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .fillMaxWidth() // so textAlign.Center works
+                        .fillMaxWidth()
                         .padding(vertical = 12.dp)
                 )
             }
@@ -73,9 +95,9 @@ fun AddWeightScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text("Calves weighed today",
                     style = androidx.compose.material3.MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Center, // center the text
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .fillMaxWidth() // so textAlign.Center works
+                        .fillMaxWidth()
                         .padding(vertical = 12.dp)
                 )
             }
@@ -87,6 +109,15 @@ fun AddWeightScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(80.dp))
             }
         }
+
+        WeighInNfcDialog(
+            showDialog = showNfcDialog,
+            tagData = tagData, // e.g., activity.nfcTagData
+            onStartScan = { /* optional */ },
+            onStopScan = { /* optional */ },
+            onClose = { showNfcDialog = false }
+        )
+
 
         // Dialog
         val dialogCalf = uiState.dialogCalf

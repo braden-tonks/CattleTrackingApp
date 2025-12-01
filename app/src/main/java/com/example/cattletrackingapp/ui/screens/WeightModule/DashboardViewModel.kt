@@ -11,14 +11,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//data class CalvesUiState(
-//    val calves: List<Calf> = emptyList(),
-//    val isLoading: Boolean = false,
-//    val error: String? = null,
-//)
-
-
-
 @HiltViewModel
 class DashBoardViewModel @Inject constructor(
     private val calfRepo: CalvesRepository
@@ -45,37 +37,16 @@ class DashBoardViewModel @Inject constructor(
         }
     }
 
-//    fun toggleSortOrder() {
-//        val newDescending = !_uiState.value.isDescending
-//        val sorted = sortCalves(_uiState.value.calves, newDescending)
-//
-//        _uiState.update {
-//            it.copy(
-//                isDescending = newDescending,
-//                calves = sorted
-//            )
-//        }
-//    }
-
     private fun getData(calves: List<Calf>): List<Calf> {
         val values = mutableListOf<Calf>()
 
         val maxCalf = calves.maxByOrNull { it.current_weight ?: 0.0 }
         val minCalf = calves.minByOrNull { it.current_weight ?: 0.0 }
+        val maxAvgGainCalf = calves.maxByOrNull { it.avg_gain ?: 0.0 }
+        val minAvgGainCalf = calves.minByOrNull { it.avg_gain ?: 0.0 }
 
-        listOfNotNull(maxCalf, minCalf).forEach { values.add(it) }
+        listOfNotNull(maxCalf, minCalf, maxAvgGainCalf, minAvgGainCalf).forEach { values.add(it) }
 
         return values
     }
-
-
-
-
-
-//        return if (descending) {
-//            calves.sortedByDescending { it.current_weight ?: 0.0 }
-//        } else {
-//            calves.sortedBy { it.current_weight ?: 0.0 }
-//        }
-//    }
 }

@@ -76,10 +76,12 @@ fun DashBoardScreen(navController: NavController){
                 }
 
                 else -> {
-                    // We know getData() returns: [heaviestCalf, lightestCalf]
+                    // returns list in calves that have all the data in this order
                     val calves = uiState.calves
                     val heaviestCalf = calves.getOrNull(0)
                     val lightestCalf = calves.getOrNull(1)
+                    val maxAvgGainCalf = calves.getOrNull(2)
+                    val minAvgGainCalf = calves.getOrNull(3)
 
                     LazyColumn(
                         modifier = Modifier
@@ -87,6 +89,7 @@ fun DashBoardScreen(navController: NavController){
                             .padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+
                         if (heaviestCalf != null) {
                             item {
                                 Text(
@@ -117,6 +120,40 @@ fun DashBoardScreen(navController: NavController){
                                     subtitle = "${lightestCalf.current_weight ?: 0.0} lb",
                                     iconPainter = painterResource(R.drawable.cow_icon),
                                     onClick = { navController.navigate(Screen.CalfDetail.routeWithId(lightestCalf.id)) }
+                                )
+                            }
+                        }
+
+                        if (maxAvgGainCalf != null) {
+                            item {
+                                Text(
+                                    text = "Calf with highest Average Gain",
+                                    style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                )
+                                CalfWeightCard(
+                                    title = "#${maxAvgGainCalf.tag_number}",
+                                    sex = maxAvgGainCalf.sex,
+                                    subtitle = "${maxAvgGainCalf.avg_gain ?: 0.0} lb per day",
+                                    iconPainter = painterResource(R.drawable.cow_icon),
+                                    onClick = { navController.navigate(Screen.CalfDetail.routeWithId(maxAvgGainCalf.id)) }
+                                )
+                            }
+                        }
+
+                        if (minAvgGainCalf != null) {
+                            item {
+                                Text(
+                                    text = "Calf with lowest Average Gain",
+                                    style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                )
+                                CalfWeightCard(
+                                    title = "#${minAvgGainCalf.tag_number}",
+                                    sex = minAvgGainCalf.sex,
+                                    subtitle = "${minAvgGainCalf.avg_gain ?: 0.0} lb per day",
+                                    iconPainter = painterResource(R.drawable.cow_icon),
+                                    onClick = { navController.navigate(Screen.CalfDetail.routeWithId(minAvgGainCalf.id)) }
                                 )
                             }
                         }
