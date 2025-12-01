@@ -60,10 +60,6 @@ fun WeighInNfcDialog(
                 // Initial blank state: no calf loaded, not loading
                 if (uiState.calf == null && !uiState.isLoading && !uiState.success) {
                     Text("Scan a calf tag", style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.height(12.dp))
-                    Button(onClick = { onStartScan() }, modifier = Modifier.fillMaxWidth()) {
-                        Text("Start Scan")
-                    }
                     Spacer(Modifier.height(8.dp))
                     Button(onClick = {
                         viewModel.resetSuccessAndForm()
@@ -150,7 +146,7 @@ fun WeighInNfcDialog(
                 Spacer(Modifier.height(8.dp))
 
                 Button(onClick = {
-                    // Cancel: reset and stop scan (if user wants)
+                    // Cancel: reset and stop scan
                     viewModel.resetSuccessAndForm()
                     onStopScan()
                     onClose()

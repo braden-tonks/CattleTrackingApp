@@ -135,13 +135,12 @@ fun CalfWeightCard(
     sex: String,
     subtitle: String? = null,
     iconPainter: Painter? = null,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     ElevatedCard(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
+        modifier = modifier,
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )

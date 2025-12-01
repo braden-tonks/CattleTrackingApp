@@ -141,7 +141,10 @@ private fun CalfCard(calf: Calf, onClick: () -> Unit) {
         sex =  calf.sex,
         subtitle = "${calf.current_weight ?: 0.0} lb",
         iconPainter = painterResource(R.drawable.cow_icon),
-        onClick = { onClick() }
+        onClick = { onClick() },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     )
 }
 
