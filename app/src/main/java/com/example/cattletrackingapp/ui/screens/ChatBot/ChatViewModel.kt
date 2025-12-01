@@ -8,13 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cattletrackingapp.ai.ChatMessage
 import com.example.cattletrackingapp.ai.ChatService
+import com.example.cattletrackingapp.ai.ChatProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val chat: ChatService
+    private val provider: ChatProvider
 ) : ViewModel() {
 
     // Messages rendered by the ChatScreen

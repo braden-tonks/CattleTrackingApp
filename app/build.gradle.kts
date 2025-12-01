@@ -47,6 +47,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        var coreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -106,4 +108,6 @@ dependencies {
     // These are for the offline mode
     implementation("androidx.room:room-runtime:2.8.3")
     kapt("androidx.room:room-compiler:2.8.3")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

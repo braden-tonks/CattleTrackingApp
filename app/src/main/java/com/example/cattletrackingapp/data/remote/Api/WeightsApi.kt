@@ -12,4 +12,14 @@ class WeightsApi @Inject constructor (private val client: SupabaseClient){
             .select()
             .decodeList()
     }
+
+    suspend fun insertWeight(weight: Weight): Boolean {
+        return try {
+            client.from("weights").insert(weight)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
 }
