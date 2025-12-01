@@ -27,8 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.R
-import com.example.cattletrackingapp.data.remote.Models.Bull
-import com.example.cattletrackingapp.data.remote.Models.Cow
 import com.example.cattletrackingapp.ui.components.DetailHeader
 import com.example.cattletrackingapp.ui.components.DetailTabRow
 import com.example.cattletrackingapp.ui.components.InfoRow

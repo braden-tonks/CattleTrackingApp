@@ -3,8 +3,6 @@ package com.example.cattletrackingapp.ui.navigation
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object SearchScreen : Screen("search_screen")
-    object SearchByRFID : Screen("search_by_rfid")
-    object AddCattle : Screen("add_cattle")
     object Vaccinations : Screen("vaccinations")
 
     object AddCow : Screen("add_cow")

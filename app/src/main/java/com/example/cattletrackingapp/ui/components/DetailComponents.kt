@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.data.remote.Models.Calf
-import com.example.cattletrackingapp.data.remote.Models.CowVaccine
 import com.example.cattletrackingapp.data.remote.Models.CowVaccineWithName
 import com.example.cattletrackingapp.data.remote.Models.Weight
 import com.example.cattletrackingapp.ui.navigation.Screen

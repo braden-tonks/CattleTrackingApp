@@ -32,7 +32,6 @@ import com.example.cattletrackingapp.ui.components.DetailTabRow
 import com.example.cattletrackingapp.ui.components.InfoRow
 import com.example.cattletrackingapp.ui.components.VaccineListSection
 import com.example.cattletrackingapp.ui.navigation.Screen
-import com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail.CalfUi
 import com.example.cattletrackingapp.ui.screens.DynamicEditPage.DynamicEditScreen
 import com.example.cattletrackingapp.ui.screens.DynamicEditPage.DynamicField
 import com.example.cattletrackingapp.ui.screens.DynamicEditPage.DynamicFieldType

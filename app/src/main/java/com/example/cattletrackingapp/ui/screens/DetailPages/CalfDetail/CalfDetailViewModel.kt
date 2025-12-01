@@ -6,9 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cattletrackingapp.data.remote.Models.Bull
-import com.example.cattletrackingapp.data.remote.Models.Calf
 import com.example.cattletrackingapp.data.remote.Models.Cow
-import com.example.cattletrackingapp.data.remote.Models.CowVaccine
 import com.example.cattletrackingapp.data.remote.Models.CowVaccineWithName
 import com.example.cattletrackingapp.data.remote.Models.Weight
 import com.example.cattletrackingapp.data.repository.BullsRepository
@@ -16,7 +14,6 @@ import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
 import com.example.cattletrackingapp.data.repository.CowsRepository
 import com.example.cattletrackingapp.data.repository.WeightsRepository
-import com.example.cattletrackingapp.ui.screens.AddPages.AddCalf.AddCalfUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
