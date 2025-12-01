@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val provider: ChatProvider
+    private val chat: ChatService
 ) : ViewModel() {
 
     // Messages rendered by the ChatScreen

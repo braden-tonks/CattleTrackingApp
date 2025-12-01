@@ -26,6 +26,19 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
         }
     }
 
+    suspend fun upsertCalf(calf: Calf): Boolean {
+        // onConflict = "id" or "tag_number" depending on your unique column
+        return try {
+            client.from("calves")
+                .upsert(calf)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            println("SyncDebug: Full Calf DTO:$calf")
+            false
+        }
+    }
+
     suspend fun getCalfById(id: String): Calf? {
         return client.from("calves")
             .select()

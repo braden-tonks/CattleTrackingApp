@@ -16,4 +16,10 @@ class WeightsRepository @Inject constructor(
     suspend fun addWeight(weight: Weight): Boolean {
         return api.insertWeight(weight)
     }
+        
+    
+    suspend fun getWeightById(id: String): List<Weight> {
+        println("SyncDebug: Getting weights for $id")
+        return api.getWeightsById(id)
+    }
 }

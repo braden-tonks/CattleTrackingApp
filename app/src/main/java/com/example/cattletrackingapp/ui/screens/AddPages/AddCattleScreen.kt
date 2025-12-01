@@ -36,7 +36,7 @@ fun AddCattleScreen(navController: NavController) {
     )
 
     val menuItems = listOf(
-        MenuItem("Add Cow", Screen.AddCattle.route, Icons.Default.Add),
+        MenuItem("Add Cow", Screen.AddCow.route, Icons.Default.Add),
         MenuItem("Add Bull", Screen.AddBull.route, Icons.Default.Add),
         MenuItem("Add Calf", Screen.AddCalf.route, Icons.Default.Add)
     )

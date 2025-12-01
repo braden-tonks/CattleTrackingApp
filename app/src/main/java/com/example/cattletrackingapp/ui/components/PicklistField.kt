@@ -1,10 +1,7 @@
 package com.example.cattletrackingapp.ui.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuItem
@@ -67,6 +64,25 @@ fun PicklistField(
     }
 }
 
+/**
+ * A reusable searchable dropdown field built with Material3's ExposedDropdownMenuBox.
+ *
+ * This component works like a normal dropdown, but also allows the user to
+ * filter the list by typing into the text field. It is generic (`<T>`), allowing
+ * you to use any data type as the dropdown option.
+ *
+ * PARAMETERS:
+ * @param label Text label displayed above the field.
+ * @param options List of selectable items of type `<T>`.
+ * @param optionLabel Function that converts an item of type `<T>` into the
+ *                    string displayed in the dropdown.
+ * @param selectedLabel The current selection's label text. This is shown in
+ *                      the text field when the dropdown is closed.
+ * @param onOptionSelected Callback invoked when the user selects an item.
+ *                         Receives the selected option of type `<T>`.
+ **/
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> SearchableDropdownField(
@@ -79,7 +95,7 @@ fun <T> SearchableDropdownField(
     var expanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf(selectedLabel) }
 
-    // Filtered list (but show all if query is blank)
+// Filtered list (but show all if query is blank)
     val filteredOptions = remember(query, options) {
         if (query.isBlank()) options
         else options.filter { option ->
