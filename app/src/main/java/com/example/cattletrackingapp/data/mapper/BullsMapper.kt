@@ -11,7 +11,8 @@ fun Bull.toEntity(): BullEntity = BullEntity(
     date_in = date_in,
     date_out = date_out,
     remarks = remarks,
-    created_at = created_at
+    created_at = created_at,
+    is_active = is_active
 )
 
 fun BullEntity.toDto(): Bull = Bull(
@@ -22,5 +23,6 @@ fun BullEntity.toDto(): Bull = Bull(
     date_in = date_in,
     date_out = date_out,
     remarks = remarks,
-    created_at = created_at
+    created_at = created_at,
+    is_active = is_active
 )

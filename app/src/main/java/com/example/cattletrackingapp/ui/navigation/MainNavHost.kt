@@ -18,6 +18,7 @@ import com.example.cattletrackingapp.ui.components.BottomNavBar
 import com.example.cattletrackingapp.ui.screens.AddPages.AddBull.AddBullScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCalf.AddCalfScreen
 import com.example.cattletrackingapp.ui.screens.AddPages.AddCattleScreen
+import com.example.cattletrackingapp.ui.screens.AddPages.AddCow.AddCowScreen
 import com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail.BullDetailScreen
 import com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail.CalfDetailScreen
 import com.example.cattletrackingapp.ui.screens.HerdList.HerdListScreen
@@ -54,8 +55,8 @@ fun MainNavHost() {
             // If Screen.AddCattle is meant to add a generic animal, call AddCattleScreen.
             // If it’s specifically cows, keep AddCowScreen but ensure the route name matches.
             composable(Screen.ChooseAddCattle.route) { AddCattleScreen(navController) }
-            // If you ALSO have a Screen.AddCow route, keep this too:
-            // composable(Screen.AddCow.route) { AddCowScreen(navController) }
+
+            composable(Screen.AddCow.route) { AddCowScreen(navController) }
 
             composable(Screen.Vaccinations.route) { VaccinationsScreen(navController) }
 

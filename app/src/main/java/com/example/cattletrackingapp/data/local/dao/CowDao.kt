@@ -10,6 +10,10 @@ interface CowDao {
     @Query("SELECT * FROM cows")
     fun getAllCows(): Flow<List<CowEntity>>
 
+    @Query("SELECT * FROM cows WHERE is_active = 1")
+    fun getAllActiveCows(): Flow<List<CowEntity>>
+
+
     @Query("SELECT * FROM cows WHERE id = :id")
     suspend fun getCowById(id: String): CowEntity?
 

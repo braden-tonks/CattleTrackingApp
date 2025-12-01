@@ -16,7 +16,8 @@ fun Calf.toEntity(): CalfEntity = CalfEntity(
     current_weight = current_weight,
     avg_gain = avg_gain,
     remarks = remarks,
-    created_at = created_at
+    created_at = created_at,
+    is_active = is_active
 )
 
 fun CalfEntity.toDto(): Calf = Calf(
@@ -32,5 +33,6 @@ fun CalfEntity.toDto(): Calf = Calf(
     current_weight = current_weight,
     avg_gain = avg_gain,
     remarks = remarks,
-    created_at = created_at
+    created_at = created_at,
+    is_active = is_active
 )

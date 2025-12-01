@@ -40,6 +40,18 @@ class BullsApi @Inject constructor (private val client: SupabaseClient){
         }
     }
 
+    suspend fun upsertBull(bull: Bull): Boolean {
+        return try {
+            client.from("bulls").upsert(bull)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+
+
     //This is for the search bar component
     suspend fun searchBullByTag(tagNumber: String): List<Bull> {
         return client.from("bulls")

@@ -32,7 +32,7 @@ enum class CattleType(
     val addRoute: String,
 ) {
     ALL("All Cattle", "", Screen.ChooseAddCattle.route),
-    COW("Cows", "Cow", Screen.AddCattle.route),
+    COW("Cows", "Cow", Screen.AddCow.route),
     CALF("Calves", "Calf", Screen.AddCalf.route),
     BULL("Bulls", "Bull", Screen.AddBull.route)
 }
