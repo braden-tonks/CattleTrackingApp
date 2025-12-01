@@ -34,6 +34,11 @@ class BullsRepository @Inject constructor(
         list.map { it.toDto() }
     }
 
+    // Get all active bulls (Entity → Model)
+    val allActiveBulls: Flow<List<Bull>> = bullDao.getAllActiveBulls().map { list ->
+        list.map { it.toDto() }
+    }
+
     // View a cow offline
     suspend fun getBullById(id: String): Bull? {
         return bullDao.getBullById(id)?.toDto()
@@ -55,13 +60,20 @@ class BullsRepository @Inject constructor(
         }
     }
 
-    suspend fun updateBull(bullEntity: BullEntity) {
-        bullDao.updateBull(
-            bullEntity.copy(
-                pendingSync = true,
-                lastModified = System.currentTimeMillis()
+    suspend fun updateBull(bull: Bull): Boolean {
+        val bullEntity: BullEntity = bull.toEntity()
+        return try {
+            bullDao.updateBull(
+                bullEntity.copy(
+                    pendingSync = true,
+                    lastModified = System.currentTimeMillis()
+                )
             )
-        )
+            true
+        } catch(e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     suspend fun syncPendingBulls() {
@@ -71,7 +83,7 @@ class BullsRepository @Inject constructor(
             try {
                 val dto = entity.toDto()
                 println("SyncDebug: Uploading cow ${entity.id} (${entity.tag_number})")
-                val syncSuccess = api.insertBull(dto)
+                val syncSuccess = api.upsertBull(dto)
                 if(syncSuccess) {
                     bullDao.updateBull(entity.copy(pendingSync = false))
                     println("SyncDebug: Pending Sync = ${entity.pendingSync} for (${entity.tag_number})")

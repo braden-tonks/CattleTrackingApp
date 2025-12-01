@@ -35,6 +35,12 @@ class CowsRepository @Inject constructor(
         list.map { it.toDto() }
     }
 
+
+    //Gets all active Cows (Entity → Model)
+    val allActiveCows: Flow<List<Cow>> = cowDao.getAllActiveCows().map { list ->
+        list.map { it.toDto() }
+    }
+
     // Insert a cow offline
     suspend fun addCow(cow: Cow): Boolean {
         val cowEntity: CowEntity = cow.toEntity()
@@ -58,13 +64,20 @@ class CowsRepository @Inject constructor(
     }
 
 
-    suspend fun updateCow(cowEntity: CowEntity) {
-        cowDao.updateCow(
-            cowEntity.copy(
-                pendingSync = true,
-                lastModified = System.currentTimeMillis()
+    suspend fun updateCow(cow: Cow): Boolean {
+        val cowEntity: CowEntity = cow.toEntity()
+        return try {
+            cowDao.updateCow(
+                cowEntity.copy(
+                    pendingSync = true,
+                    lastModified = System.currentTimeMillis()
+                )
             )
-        )
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     // Push pending cows to Supabase
@@ -74,7 +87,7 @@ class CowsRepository @Inject constructor(
             try {
                 val dto = entity.toDto()
                 println("SyncDebug: Uploading cow ${entity.id} (${entity.tag_number})")
-                val syncSuccess = api.insertCow(dto)
+                val syncSuccess = api.upsertCow(dto)
                 if (syncSuccess) {
                     cowDao.updateCow(entity.copy(pendingSync = false))
                     println("SyncDebug: Pending Sync = ${entity.pendingSync} for (${entity.tag_number})")

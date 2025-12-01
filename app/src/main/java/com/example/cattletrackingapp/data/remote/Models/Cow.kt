@@ -11,5 +11,6 @@ data class Cow (
     val sire_number: String? = null,
     val birth_date: String,
     val remarks: String? = null,
-    val created_at: String? = null
+    val created_at: String? = null,
+    val is_active: Boolean? = null
 )

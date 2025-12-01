@@ -44,9 +44,9 @@ class HerdListViewModel @Inject constructor(
     private fun observeAllAnimals() {
         viewModelScope.launch {
             combine(
-                cowRepo.allCows,
-                calfRepo.allCalves,
-                bullRepo.allBulls
+                cowRepo.allActiveCows,
+                calfRepo.allActiveCalves,
+                bullRepo.allActiveBulls
             ) { cows, calves, bulls ->
                 val allAnimals = (
                         cows.map { it.toAnimalUi() } +

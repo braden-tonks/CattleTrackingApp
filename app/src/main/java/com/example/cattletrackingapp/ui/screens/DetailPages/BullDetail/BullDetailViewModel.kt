@@ -1,9 +1,12 @@
 package com.example.cattletrackingapp.ui.screens.DetailPages.BullDetail
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cattletrackingapp.data.remote.Models.Calf
-import com.example.cattletrackingapp.data.remote.Models.CowVaccine
+import com.example.cattletrackingapp.data.remote.Models.CowVaccineWithName
 import com.example.cattletrackingapp.data.repository.BullsRepository
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
@@ -25,13 +28,17 @@ class BullDetailViewModel @Inject constructor(
         val loading: Boolean = false,
         val bull: BullUi? = null,
         val calfList: List<Calf> = emptyList(),
-        val cowVaccineList: List<CowVaccine> = emptyList(),
+        val cowVaccineList: List<CowVaccineWithName> = emptyList(),
+        val updateSuccess: Boolean? = null,
         val error: String? = null
     )
 
     private val _uiState = MutableStateFlow(UiState())
 
     val uiState: StateFlow<UiState> = _uiState
+
+    var saveState by mutableStateOf(UiState())
+        private set
 
 
     fun loadBullDetails(id: String) {
@@ -67,6 +74,36 @@ class BullDetailViewModel @Inject constructor(
                 }
             }
 
+        }
+    }
+
+    fun updateBull(bullUi: BullUi) {
+        val bull = bullUi.toModel()
+        saveState = saveState.copy(loading = true, updateSuccess = null, error = null)
+
+        viewModelScope.launch {
+            runCatching { bullRepo.updateBull(bull) }
+                .onSuccess {
+                    if (it) {
+                        saveState = saveState.copy(loading = false, updateSuccess = true)
+
+                        // also update detail UiState so UI refreshes with new values
+                        _uiState.update { it.copy(bull = bullUi) }
+                    } else {
+                        saveState = saveState.copy(
+                            loading = false,
+                            updateSuccess = false,
+                            error = "Failed to save cow"
+                        )
+                    }
+                }
+                .onFailure { e ->
+                    saveState = saveState.copy(
+                        loading = false,
+                        updateSuccess = false,
+                        error = e.message ?: "Unknown error"
+                    )
+                }
         }
     }
 }

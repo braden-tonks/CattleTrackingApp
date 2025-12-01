@@ -18,6 +18,8 @@ data class CalfEntity(
     val avg_gain: Double? = null,
     val remarks: String? = null,
     val created_at: String? = null,
+    val is_active: Boolean? = null,
+
 
     // Offline-sync metadata
     val lastModified: Long = System.currentTimeMillis(),

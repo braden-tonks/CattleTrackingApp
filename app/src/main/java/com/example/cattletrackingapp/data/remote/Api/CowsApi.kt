@@ -29,6 +29,16 @@ class CowsApi @Inject constructor (private val client: SupabaseClient) {
         }
     }
 
+    suspend fun upsertCow(cow: Cow): Boolean {
+        return try {
+            client.from("cows").upsert(cow)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
     suspend fun getCowById(id: String): Cow? {
         return client.from("cows")
             .select()
