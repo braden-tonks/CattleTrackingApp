@@ -13,6 +13,14 @@ class WeightsApi @Inject constructor (private val client: SupabaseClient){
             .decodeList()
     }
 
+    suspend fun getWeightsById(cowId: String): List<Weight> {
+        return client.from("weights")
+            .select() {
+                filter {
+                    eq("calf_id", cowId)
+                }
+            }
+            .decodeList<Weight>()
     suspend fun insertWeight(weight: Weight): Boolean {
         return try {
             client.from("weights").insert(weight)

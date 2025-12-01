@@ -3,11 +3,15 @@ package com.example.cattletrackingapp.ui.screens.DetailPages.CalfDetail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +30,11 @@ import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.ui.components.DetailHeader
 import com.example.cattletrackingapp.ui.components.DetailTabRow
 import com.example.cattletrackingapp.ui.components.InfoRow
+import com.example.cattletrackingapp.ui.components.VaccineListSection
+import com.example.cattletrackingapp.ui.components.WeightListSection
+import com.example.cattletrackingapp.ui.screens.DynamicEditPage.DynamicEditScreen
+import com.example.cattletrackingapp.ui.screens.DynamicEditPage.DynamicField
+import com.example.cattletrackingapp.ui.screens.DynamicEditPage.DynamicFieldType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,10 +96,16 @@ fun CalfDetailScreen(
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
+                    println("SyncDebug: CalfDetailScreen: ${state.weightList}")
                     when (selectedTab) {
-                        0 -> CalfDetailsSection(state.calf!!)
-                        1 -> Text("Vaccines")//VaccinesListSection(state.cowVaccineList)
-                        2 -> Text("Weights")//WeightListSection(state.calfWeightList)
+                        0 -> CalfDetailsSection(
+                            calf = state.calf!!,
+                            onEditSubmit = { updatedCalfUi ->
+                                vm.updateCalf(updatedCalfUi)
+                            }
+                        )
+                        1 -> VaccineListSection(state.cowVaccineList, navController)
+                        2 -> WeightListSection(state.weightList, navController)
                     }
                 }
             }
@@ -110,8 +125,16 @@ fun CalfDetailScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalfDetailsSection(calf: CalfUi) {
+fun CalfDetailsSection(
+    calf: CalfUi,
+    onEditSubmit: (CalfUi) -> Unit,
+    vm: CalfDetailViewModel = hiltViewModel(),
+) {
+
+    var showEditSheet by remember { mutableStateOf(false) }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -126,6 +149,59 @@ fun CalfDetailsSection(calf: CalfUi) {
             InfoRow(label = "Current Weight:", value = calf.currentWeight?.toString() ?: "N/A")
             InfoRow(label = "Average Gain:", value = calf.avgGain?.toString() ?: "N/A")
             InfoRow(label = "Remarks:", value = calf.remarks ?: "")
+            InfoRow(label = "Active:", value = if (calf.isActive) "Yes" else "No")
+        }
+
+        // Edit button at the bottom
+        item {
+            Spacer(Modifier.height(24.dp))
+            Button(
+                onClick = { showEditSheet = true },
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text("Edit Calf")
+            }
+        }
+    }
+
+
+
+    if (showEditSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showEditSheet = false
+            }
+        ) {
+            DynamicEditScreen(
+                title = "Edit Calf",
+                fields = listOf(
+                    DynamicField("tagNumber", "Tag Number", DynamicFieldType.Text, calf.tagNumber),
+                    DynamicField("birthDate", "Date of Birth", DynamicFieldType.Date, calf.birthDate),
+                    DynamicField("sex", "Sex", DynamicFieldType.Picklist(listOf("Male", "Female")), calf.sex),
+                    DynamicField("sireNumber", "Sire Number", DynamicFieldType.SearchableDropdownField(vm.bulls.map { it.tag_number }), calf.sireNumber),
+                    DynamicField("damNumber", "Dam Number", DynamicFieldType.SearchableDropdownField(vm.cows.map { it.tag_number }), calf.damNumber),
+                    DynamicField("remarks", "Remarks", DynamicFieldType.Text, calf.remarks),
+                    DynamicField("is_active", "Active", DynamicFieldType.Picklist(listOf("Yes", "No")), if (calf.isActive) "Yes" else "No")
+                    ),
+                onSubmit = { values: Map<String, Any?> ->
+                    val updatedCalf = calf.copy(
+                        tagNumber = values["tagNumber"] as? String ?: calf.tagNumber,
+                        birthDate = values["birthDate"] as? String ?: calf.birthDate,
+                        sex = values["sex"] as? String ?: calf.sex,
+                        sireNumber = values["sireNumber"] as? String ?: calf.sireNumber,
+                        damNumber = values["damNumber"] as? String ?: calf.damNumber,
+                        remarks = values["remarks"] as? String ?: calf.remarks,
+                        isActive = when (values["is_active"] as? String) {
+                            "Yes" -> true
+                            "No" -> false
+                            else -> calf.isActive
+                        }
+                    )
+
+                    onEditSubmit(updatedCalf)
+                    showEditSheet = false
+                }
+            )
         }
     }
 }

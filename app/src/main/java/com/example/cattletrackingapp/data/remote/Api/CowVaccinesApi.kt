@@ -1,6 +1,7 @@
 package com.example.cattletrackingapp.data.remote.Api
 
 import com.example.cattletrackingapp.data.remote.Models.CowVaccine
+import com.example.cattletrackingapp.data.remote.Models.CowVaccineWithName
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -25,9 +26,9 @@ class CowVaccinesApi @Inject constructor (private val client: SupabaseClient){
             .decodeList()
     }
 
-    suspend fun getCowVaccineByAnimalId(id: String): List<CowVaccine> {
+    suspend fun getCowVaccineByAnimalId(id: String): List<CowVaccineWithName> {
         return client.from("cow_vaccines")
-            .select(Columns.list("id", "date_given", "remarks")) {
+            .select(Columns.list("id", "vaccine_id(name)", "date_given")) {
                 filter {
                     or {
                         eq("cow_id", id)
@@ -36,7 +37,7 @@ class CowVaccinesApi @Inject constructor (private val client: SupabaseClient){
                     }
                 }
             }
-            .decodeList<CowVaccine>()
+            .decodeList<CowVaccineWithName>()
 
     }
 }

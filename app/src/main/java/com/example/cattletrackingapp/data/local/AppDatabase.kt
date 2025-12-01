@@ -15,7 +15,7 @@ import jakarta.inject.Singleton
 
 @Database(
     entities = [CowEntity::class, CalfEntity::class, BullEntity::class, FarmerEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -34,7 +34,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "farm_db").build()
+        Room.databaseBuilder(context, AppDatabase::class.java, "farm_db")
+            .fallbackToDestructiveMigration(false)
+            .build()
 
     @Provides
     fun provideCowDao(db: AppDatabase): CowDao = db.cowDao()

@@ -14,6 +14,9 @@ interface CalfDao {
     @Query("SELECT * FROM calves")
     fun getAllCalves(): Flow<List<CalfEntity>>
 
+    @Query("SELECT * FROM calves WHERE is_active = 1")
+    fun getAllActiveCalves(): Flow<List<CalfEntity>>
+
     @Query("SELECT * FROM calves WHERE id = :id")
     suspend fun getCalfById(id: String): CalfEntity?
 
