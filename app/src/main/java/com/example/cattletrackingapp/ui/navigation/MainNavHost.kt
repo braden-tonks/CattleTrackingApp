@@ -55,8 +55,6 @@ fun MainNavHost() {
 
             composable(Screen.SearchScreen.route) { SearchScreen(navController) }
 
-            // If Screen.AddCattle is meant to add a generic animal, call AddCattleScreen.
-            // If it’s specifically cows, keep AddCowScreen but ensure the route name matches.
             composable(Screen.ChooseAddCattle.route) { AddCattleScreen(navController) }
 
             composable(Screen.AddCow.route) { AddCowScreen(navController) }

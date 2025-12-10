@@ -208,7 +208,6 @@ fun CalfWeightCard(
 @Composable
 fun NFCcard(
     title: String,
-    //sex: String,
     type: CattleType,
     iconPainter: Painter? = null,
     onClick: () -> Unit
@@ -250,17 +249,6 @@ fun NFCcard(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-
-//            Column(
-//                modifier = Modifier.weight(1f)
-//            ) {
-//                Text(
-//                    text = sex,
-//                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Light),
-//                    maxLines = 1,
-//                    overflow = TextOverflow.Ellipsis
-//                )
-//            }
 
             Column(
                 modifier = Modifier.weight(1f)
