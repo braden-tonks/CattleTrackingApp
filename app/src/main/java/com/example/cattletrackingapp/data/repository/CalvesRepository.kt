@@ -42,7 +42,7 @@ class CalvesRepository @Inject constructor(
         list.map { it.toDto() }
     }
 
-    // Get all active Calves (Entity → Model)
+    // Get all active Calves (Entity -> Model)
     val allActiveCalves: Flow<List<Calf>> = calfDao.getAllActiveCalves().map { list ->
         list.map { it.toDto() }
     }
