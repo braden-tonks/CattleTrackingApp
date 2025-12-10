@@ -1,6 +1,8 @@
 package com.example.cattletrackingapp.data.remote.Api
 
 import com.example.cattletrackingapp.data.remote.Models.Bull
+import com.example.cattletrackingapp.data.remote.Models.BullIdAndTag
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Count
@@ -21,6 +23,13 @@ class BullsApi @Inject constructor (private val client: SupabaseClient){
             .firstOrNull { it.id == id }
     }
 
+
+    suspend fun getBullIdsAndTags(): List<BullIdAndTag> {
+        return client.from("bulls")
+            .select(Columns.list("id", "tag_number"))
+            .decodeList<BullIdAndTag>()
+    }
+
     suspend fun insertBull(bull: Bull): Boolean {
         return try {
             client.from("bulls").insert(bull)
@@ -30,6 +39,18 @@ class BullsApi @Inject constructor (private val client: SupabaseClient){
             false
         }
     }
+
+    suspend fun upsertBull(bull: Bull): Boolean {
+        return try {
+            client.from("bulls").upsert(bull)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+
 
     //This is for the search bar component
     suspend fun searchBullByTag(tagNumber: String): List<Bull> {

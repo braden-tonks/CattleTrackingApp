@@ -14,6 +14,9 @@ interface BullDao {
     @Query("SELECT * FROM bulls")
     fun getAllBulls(): Flow<List<BullEntity>>
 
+    @Query("SELECT * FROM bulls WHERE is_active = 1")
+    fun getAllActiveBulls(): Flow<List<BullEntity>>
+
     @Query("SELECT * FROM bulls WHERE id = :id")
     suspend fun getBullById(id: String): BullEntity?
 

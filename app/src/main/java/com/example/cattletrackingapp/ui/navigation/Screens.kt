@@ -3,14 +3,15 @@ package com.example.cattletrackingapp.ui.navigation
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object SearchScreen : Screen("search_screen")
-    object SearchByRFID : Screen("search_by_rfid")
-    object AddCattle : Screen("add_cattle")
-    object Vaccinations : Screen("vaccinatons")
+    object Vaccinations : Screen("vaccinations")
+
+    object AddCow : Screen("add_cow")
 
     object CowDetail : Screen("cow_detail/{cowId}") {
         fun routeWithId(cowId: String?) = "cow_detail/$cowId"
         const val ARG_ID = "cowId"
     }
+
     object AddCalf : Screen("add_calf")
 
 
@@ -36,5 +37,6 @@ sealed class Screen(val route: String) {
     object WeightModule : Screen("weight_module")
     object DashBoard : Screen("dashboard")
     object WeightList : Screen("weight_list")
+    object AddWeight : Screen("add_weight")
 
 }

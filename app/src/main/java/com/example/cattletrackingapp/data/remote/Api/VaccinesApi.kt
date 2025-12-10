@@ -13,7 +13,7 @@ class VaccinesApi @Inject constructor(
     /** Get all vaccines (we only show name in UI for now). */
     suspend fun getVaccines(): List<Vaccine> {
         return client.from("vaccines")
-            .select()              // pulls: id, farmer_id, vaccine_number, name, description, notes, created_at
+            .select()
             .decodeList()
     }
 
@@ -35,4 +35,15 @@ class VaccinesApi @Inject constructor(
             .decodeList<Vaccine>()
             .firstOrNull { it.id == id }
     }
+
+    suspend fun deleteVaccine(vaccineId: String): Boolean {
+        return try {
+            client.from("vaccines").delete { filter { eq("id", vaccineId) } }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

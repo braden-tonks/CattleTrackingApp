@@ -16,5 +16,12 @@ data class Calf (
     val current_weight: Double? = null,
     val avg_gain: Double? = null,
     val remarks: String? = null,
-    val created_at: String? = null
+    val created_at: String? = null,
+    val is_active: Boolean? = null
+)
+
+@Serializable
+data class CowIdAndTag(
+    val id: String,
+    val tag_number: String
 )

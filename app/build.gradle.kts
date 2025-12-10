@@ -31,6 +31,8 @@ android {
         }
         buildConfigField("String", "SUPABASE_PUBLISHABLE_KEY", "\"${properties.getProperty("SUPABASE_PUBLISHABLE_KEY")}\"")
         buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("SUPABASE_URL")}\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"${properties.getProperty("GEMINI_API_KEY", "")}\"")
+
     }
 
     buildTypes {
@@ -45,6 +47,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        var coreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -89,8 +93,21 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.57.2")
     kapt("com.google.dagger:hilt-android-compiler:2.57.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+    //this is all for the Chatbot
+    implementation(platform("io.ktor:ktor-bom:3.2.3"))
+    implementation("io.ktor:ktor-client-core")
+    implementation("io.ktor:ktor-client-android")
+    implementation("io.ktor:ktor-client-logging")
+    implementation("io.ktor:ktor-client-content-negotiation")
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
     // These are for the offline mode
     implementation("androidx.room:room-runtime:2.8.3")
     kapt("androidx.room:room-compiler:2.8.3")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

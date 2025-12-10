@@ -6,6 +6,7 @@ import com.example.cattletrackingapp.data.mapper.toDto
 import com.example.cattletrackingapp.data.mapper.toEntity
 import com.example.cattletrackingapp.data.remote.Api.CalvesApi
 import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.Weight
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -41,6 +42,11 @@ class CalvesRepository @Inject constructor(
         list.map { it.toDto() }
     }
 
+    // Get all active Calves (Entity -> Model)
+    val allActiveCalves: Flow<List<Calf>> = calfDao.getAllActiveCalves().map { list ->
+        list.map { it.toDto() }
+    }
+
     // View a cow offline
     suspend fun getCalfById(id: String): Calf? {
         return calfDao.getCalfById(id)?.toDto()
@@ -68,14 +74,22 @@ class CalvesRepository @Inject constructor(
         }
     }
 
-    suspend fun updateCalf(calfEntity: CalfEntity) {
-        calfDao.updateCalf(
-            calfEntity.copy(
-                pendingSync = true,
-                lastModified = System.currentTimeMillis()
+    suspend fun updateCalf(calf: Calf): Boolean {
+        val calfEntity: CalfEntity = calf.toEntity()
+        return try {
+            calfDao.updateCalf(
+                calfEntity.copy(
+                    pendingSync = true,
+                    lastModified = System.currentTimeMillis()
+                )
             )
-        )
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
+
 
     // Offline sync
     suspend fun syncPendingCalves() {
@@ -84,7 +98,7 @@ class CalvesRepository @Inject constructor(
             try {
                 val dto = entity.toDto()
                 println("SyncDebug: Uploading cow ${entity.id} (${entity.tag_number})")
-                val syncSuccess = api.insertCalf(dto)
+                val syncSuccess = api.upsertCalf(dto)
                 if (syncSuccess) {
                     calfDao.updateCalf(entity.copy(pendingSync = false))
                     println("SyncDebug: Pending Sync = ${entity.pendingSync} for (${entity.tag_number})")
@@ -114,4 +128,10 @@ class CalvesRepository @Inject constructor(
         } catch (e: Exception) { /* offline: ignore */
         }
     }
+
+    //Update current weight and avg gain
+    suspend fun reloadCalfweight(current_weight: Weight, id: String, days: Int): Boolean {
+        return api.reloadCurrentWeight(current_weight, id, days)
+    }
+
 }

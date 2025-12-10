@@ -1,6 +1,7 @@
 package com.example.cattletrackingapp.data.remote.Api
 
 import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.Weight
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Count
@@ -21,6 +22,19 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
             true
         } catch (e: Exception) {
             e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun upsertCalf(calf: Calf): Boolean {
+        // onConflict = "id" or "tag_number" depending on your unique column
+        return try {
+            client.from("calves")
+                .upsert(calf)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            println("SyncDebug: Full Calf DTO:$calf")
             false
         }
     }
@@ -72,5 +86,35 @@ class CalvesApi @Inject constructor (private val client: SupabaseClient){
                 count(Count.EXACT)
             }
             .countOrNull()?.toInt() ?: 0
+    }
+
+    suspend fun reloadCurrentWeight(weight: Weight, id: String, days: Int): Boolean {
+        return try {
+            client.from("calves").update(
+                {
+                    set("current_weight", weight.weight)
+                }
+            ) {
+                filter {
+                    eq("id", id)
+                }
+            }
+
+            val avg_gain = ((weight.weight - 40.0)/days)
+
+            client.from("calves").update(
+                {
+                    set("avg_gain", avg_gain)
+                }
+            ) {
+                filter {
+                    eq("id", id)
+                }
+            }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 }

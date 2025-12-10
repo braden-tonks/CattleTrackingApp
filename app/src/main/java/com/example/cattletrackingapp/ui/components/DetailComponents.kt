@@ -23,8 +23,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.cattletrackingapp.R
 import com.example.cattletrackingapp.data.remote.Models.Calf
+import com.example.cattletrackingapp.data.remote.Models.CowVaccineWithName
+import com.example.cattletrackingapp.data.remote.Models.Weight
+import com.example.cattletrackingapp.ui.navigation.Screen
 import com.example.cattletrackingapp.ui.theme.detailHeaderLarge
 import com.example.cattletrackingapp.ui.theme.detailHeaderSmall
 
@@ -86,13 +90,15 @@ fun DetailTabRow(
             Tab(
                 selected = selectedTabIndex == index,
                 onClick = { onTabSelected(index) },
-                text = { Text(
-                    text = title,
-                    style = if (selectedTabIndex == index)
-                        MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                    else
-                        MaterialTheme.typography.labelLarge
-                ) }
+                text = {
+                    Text(
+                        text = title,
+                        style = if (selectedTabIndex == index)
+                            MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                        else
+                            MaterialTheme.typography.labelLarge
+                    )
+                }
 
             )
         }
@@ -102,9 +108,10 @@ fun DetailTabRow(
 
 @Composable
 fun InfoRow(label: String, value: String) {
-    Column(modifier = Modifier
-        .padding(vertical = 10.dp)
-        .fillMaxWidth()
+    Column(
+        modifier = Modifier
+            .padding(vertical = 10.dp)
+            .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -146,5 +153,39 @@ fun CalfListSection(calves: List<Calf>, onClick: (Calf) -> Unit) {
             iconPainter = painterResource(R.drawable.cow_icon),
             onClick = onClickItem
         )
+    }
+}
+
+
+// Used for CowDetail, BullDetail, and CalfDetail pages to present a list of vaccines given to them
+@Composable
+fun VaccineListSection(cvwn: List<CowVaccineWithName>, navController: NavController) {
+    CattleList(
+        items = cvwn,
+        onClick = { navController.navigate(Screen.Vaccinations.route) }
+    ) { cvwnItem, onClickItem ->
+        CattleCard(
+            title = cvwnItem.vaccine_id.name,
+            subtitle = "Date Given: ${cvwnItem.date_given}",
+            iconPainter = painterResource(R.drawable.svg_vaccine_icon),
+            onClick = onClickItem
+        )
+    }
+}
+
+
+@Composable
+fun WeightListSection(weights: List<Weight>, navController: NavController) {
+    println("SyncDebug: WeightListSection called: $weights")
+    CattleList(
+        items = weights,
+        onClick = { navController.navigate(Screen.WeightList.route) }
+    ) { weight, onClickItem ->
+        CattleCard(
+            title = "Weight: ${weight.weight}",
+            subtitle = "Date Weighed: ${weight.date_weighed}",
+            onClick = onClickItem
+        )
+
     }
 }

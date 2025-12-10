@@ -53,7 +53,7 @@ fun HomeScreen(navController: NavController) {
             .padding(16.dp)
     ) {
 
-        // Menu buttons (bottom half
+        // Menu buttons (bottom half)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)

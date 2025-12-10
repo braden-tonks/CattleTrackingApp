@@ -11,7 +11,8 @@ fun Cow.toEntity(): CowEntity = CowEntity(
     sire_number = sire_number,
     birth_date = birth_date,
     remarks = remarks,
-    created_at = created_at
+    created_at = created_at,
+    is_active = is_active
 )
 
 fun CowEntity.toDto(): Cow = Cow(
@@ -22,5 +23,6 @@ fun CowEntity.toDto(): Cow = Cow(
     sire_number = sire_number,
     birth_date = birth_date,
     remarks = remarks,
-    created_at = created_at
+    created_at = created_at,
+    is_active = is_active
 )
