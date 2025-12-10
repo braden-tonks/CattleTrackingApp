@@ -13,7 +13,7 @@ class VaccinesApi @Inject constructor(
     /** Get all vaccines (we only show name in UI for now). */
     suspend fun getVaccines(): List<Vaccine> {
         return client.from("vaccines")
-            .select()              // pulls: id, farmer_id, vaccine_number, name, description, notes, created_at
+            .select()
             .decodeList()
     }
 

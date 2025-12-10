@@ -9,7 +9,10 @@ class ChatService @Inject constructor(
     suspend fun ask(messages: List<ChatMessage>): ChatMessage {
         val userText = messages.lastOrNull { it.role == ChatMessage.Role.User }?.text.orEmpty()
 
-        // ---------- Debug: /ctx <query> shows DB context ----------
+        /** ---------- Debug: /ctx <query> shows DB context ----------
+        This can be used to guarantee the correct output from the AI chatbot
+        if its not answering correctly **/
+
         if (userText.startsWith("/ctx", ignoreCase = true)) {
             val q = userText.removePrefix("/ctx").trim()
             val ctx = retrieval.fetchContextFor(q)
