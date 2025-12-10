@@ -40,7 +40,7 @@ fun ChatOverlay(onClose: () -> Unit) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(inner),
-                    vm = vm // ✅ pass it explicitly
+                    vm = vm
                 )
             }
         }

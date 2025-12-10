@@ -26,7 +26,6 @@ object ChatModule {
         else GeminiChatProvider(apiKey = key, modelName = "gemini-2.5-flash")
     }
 
-    // ChatRetrieval(cows, bulls, calves)
     @Provides @Singleton
     fun provideChatRetrieval(
         cows: CowsRepository,
