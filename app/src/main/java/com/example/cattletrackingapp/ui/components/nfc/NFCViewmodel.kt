@@ -6,7 +6,6 @@ import com.example.cattletrackingapp.data.repository.BullsRepository
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowsRepository
 import com.example.cattletrackingapp.ui.components.CattleType
-import com.example.cattletrackingapp.ui.components.nfc.AnimalUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
