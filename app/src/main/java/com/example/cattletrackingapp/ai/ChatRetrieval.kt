@@ -168,13 +168,12 @@ class ChatRetrieval @Inject constructor(
         return null
     }
 
-    /** Builds the text context the model will read. NOTE: farmer_id is intentionally omitted. */
+    // Builds the text context the model will read. NOTE: farmer_id is intentionally omitted.
     suspend fun fetchContextFor(userText: String): String {
         val entity = fetchEntityFor(userText) ?: return HELP
         return when (entity) {
             is EntityResult.Cow -> buildString {
                 appendLine("Entity: Cow")
-                // no farmer_id line
                 appendLine("tag_number: ${entity.tag_number}")
                 appendLine("dam_number: ${entity.dam_number ?: "(none)"}")
                 appendLine("sire_number: ${entity.sire_number ?: "(none)"}")
@@ -184,7 +183,6 @@ class ChatRetrieval @Inject constructor(
 
             is EntityResult.Bull -> buildString {
                 appendLine("Entity: Bull")
-                // no farmer_id line
                 appendLine("tag_number: ${entity.tag_number}")
                 appendLine("bull_name: ${entity.bull_name ?: "(none)"}")
                 appendLine("date_in: ${entity.date_in ?: "(none)"}")
@@ -194,7 +192,6 @@ class ChatRetrieval @Inject constructor(
 
             is EntityResult.Calf -> buildString {
                 appendLine("Entity: Calf")
-                // no farmer_id line
                 appendLine("tag_number: ${entity.tag_number}")
                 appendLine("dam_number: ${entity.dam_number}")
                 appendLine("sire_number: ${entity.sire_number}")

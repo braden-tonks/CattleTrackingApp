@@ -15,7 +15,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-/** Vaccine row used by the UI. */
+// Vaccine row used by the UI.
 data class VaccineUi(
     val id: String,
     val name: String,
@@ -24,7 +24,7 @@ data class VaccineUi(
     val vaccineId: String? = null
 )
 
-/** Minimal animal record for the Assign step. */
+// Minimal animal record for the Assign step.
 data class AnimalHit(val id: String, val tag: String, val gender: String? = null)
 
 @HiltViewModel
@@ -107,13 +107,13 @@ class VaccinationsViewModel @Inject constructor(
         refresh()
     }
 
-    /** Prefer vaccine_number; otherwise a shortened id. */
+    // Prefer vaccine_number; otherwise a shortened id.
     private fun displayIdOf(id: String?, vaccineNumber: Int?): String? {
         return vaccineNumber?.toString()
             ?: id?.takeIf { it.isNotBlank() }?.take(8)
     }
 
-    /** Load/refresh the catalog of vaccines. */
+    // Load/refresh the catalog of vaccines.
     fun refresh() {
         uiState = UiState(loading = true)
         viewModelScope.launch {
@@ -135,7 +135,7 @@ class VaccinationsViewModel @Inject constructor(
         }
     }
 
-    /** Add a vaccine (name required, description/notes nullable). */
+    // Add a vaccine (name required, description/notes nullable).
     fun addVaccine(
         name: String,
         description: String? = null,
@@ -177,14 +177,13 @@ class VaccinationsViewModel @Inject constructor(
         group: TargetGroup,
         onError: (String) -> Unit = {}
     ) {
-        // Already loaded? skip
         animalsByGroup[group]?.let { return }
 
         viewModelScope.launch {
             runCatching<List<AnimalHit>> {
                 when (group) {
                     TargetGroup.Cows -> {
-                        val cows = cowsRepo.allCows.first() // snapshot Flow<List<Cow>>
+                        val cows = cowsRepo.allCows.first()
                         cows.mapNotNull { cow ->
                             val id = cow.id ?: return@mapNotNull null
                             val tag = cow.tag_number ?: return@mapNotNull null
@@ -192,7 +191,7 @@ class VaccinationsViewModel @Inject constructor(
                         }
                     }
                     TargetGroup.Bulls -> {
-                        val bulls = bullsRepo.allBulls.first() // snapshot Flow<List<Bull>>
+                        val bulls = bullsRepo.allBulls.first()
                         bulls.mapNotNull { bull ->
                             val id = bull.id ?: return@mapNotNull null
                             val tag = bull.tag_number ?: return@mapNotNull null
@@ -200,7 +199,7 @@ class VaccinationsViewModel @Inject constructor(
                         }
                     }
                     TargetGroup.Calves -> {
-                        val calves = calvesRepo.allCalves.first() // snapshot Flow<List<Calf>>
+                        val calves = calvesRepo.allCalves.first()
                         calves.mapNotNull { calf ->
                             val id = calf.id ?: return@mapNotNull null
                             val tag = calf.tag_number ?: return@mapNotNull null
@@ -217,7 +216,7 @@ class VaccinationsViewModel @Inject constructor(
         }
     }
 
-    /** Log vaccinations to DB; calls onDone(true) on success so the UI can reset. */
+    // Log vaccinations to DB; calls onDone(true) on success so the UI can reset.
     fun logVaccinations(
         vaccines: List<String>,
         group: TargetGroup,
