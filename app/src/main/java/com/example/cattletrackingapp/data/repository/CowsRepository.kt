@@ -30,13 +30,13 @@ class CowsRepository @Inject constructor(
 
     //These next functions are used for the Offline mode of the app
     // Expose offline data for UI
-    // Observe all cows (Entity → Model)
+    // Observe all cows (Entity -> Model)
     val allCows: Flow<List<Cow>> = cowDao.getAllCows().map { list ->
         list.map { it.toDto() }
     }
 
 
-    //Gets all active Cows (Entity → Model)
+    //Gets all active Cows (Entity -> Model)
     val allActiveCows: Flow<List<Cow>> = cowDao.getAllActiveCows().map { list ->
         list.map { it.toDto() }
     }

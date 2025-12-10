@@ -34,7 +34,7 @@ class BullsRepository @Inject constructor(
         list.map { it.toDto() }
     }
 
-    // Get all active bulls (Entity → Model)
+    // Get all active bulls (Entity -> Model)
     val allActiveBulls: Flow<List<Bull>> = bullDao.getAllActiveBulls().map { list ->
         list.map { it.toDto() }
     }

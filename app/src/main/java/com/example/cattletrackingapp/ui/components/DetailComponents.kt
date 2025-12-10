@@ -184,7 +184,6 @@ fun WeightListSection(weights: List<Weight>, navController: NavController) {
         CattleCard(
             title = "Weight: ${weight.weight}",
             subtitle = "Date Weighed: ${weight.date_weighed}",
-            //iconPainter = painterResource(R.drawable.svg_weight_icon),
             onClick = onClickItem
         )
 

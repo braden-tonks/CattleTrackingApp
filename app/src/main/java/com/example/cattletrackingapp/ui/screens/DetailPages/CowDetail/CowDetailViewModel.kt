@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cattletrackingapp.data.remote.Models.Calf
-import com.example.cattletrackingapp.data.remote.Models.CowVaccine
 import com.example.cattletrackingapp.data.remote.Models.CowVaccineWithName
 import com.example.cattletrackingapp.data.repository.CalvesRepository
 import com.example.cattletrackingapp.data.repository.CowVaccinesRepository
